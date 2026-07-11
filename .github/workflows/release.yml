@@ -1,0 +1,38 @@
+name: Release Engineering
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Read Changelog Entry
+        id: get_changelog
+        run: |
+          # Extract release notes for the tag from CHANGELOG.md
+          TAG_VERSION=${GITHUB_REF#refs/tags/v}
+          echo "Processing release notes for version $TAG_VERSION"
+          # Try to get changes under this version header
+          sed -n "/## \[$TAG_VERSION\]/,/## /p" CHANGELOG.md | sed '$d' > release_notes.txt
+          cat release_notes.txt
+
+      - name: Generate Draft Release
+        uses: softprops/action-gh-release@v2
+        with:
+          body_path: release_notes.txt
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

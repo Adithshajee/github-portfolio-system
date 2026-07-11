@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400" width="100%" height="100%">
+  <defs>
+    <!-- Background Gradients -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0B0F19" />
+      <stop offset="50%" stop-color="#111827" />
+      <stop offset="100%" stop-color="#1E1B4B" />
+    </linearGradient>
+
+    <!-- Text Color Gradient -->
+    <linearGradient id="textGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#3B82F6" />
+      <stop offset="50%" stop-color="#60A5FA" />
+      <stop offset="100%" stop-color="#34D399" />
+    </linearGradient>
+
+    <!-- Node Glow Filter -->
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="400" rx="15" fill="url(#bgGrad)" />
+
+  <!-- Geometric Grid Accent -->
+  <path d="M 0,100 L 1200,100 M 0,200 L 1200,200 M 0,300 L 1200,300 M 200,0 L 200,400 M 400,0 L 400,400 M 600,0 L 600,400 M 800,0 L 800,400 M 1000,0 L 1000,400" stroke="#334155" stroke-width="0.5" opacity="0.15" />
+
+  <!-- Glowing Connection Networks (Abstract AI/ML Representation) -->
+  <g opacity="0.4">
+    <!-- Lines connecting nodes -->
+    <line x1="950" y1="120" x2="1080" y2="80" stroke="#3B82F6" stroke-width="1.5" />
+    <line x1="1080" y1="80" x2="1120" y2="220" stroke="#60A5FA" stroke-width="1.5" />
+    <line x1="1120" y1="220" x2="1010" y2="280" stroke="#34D399" stroke-width="1.5" />
+    <line x1="1010" y1="280" x2="950" y2="120" stroke="#60A5FA" stroke-width="1.5" />
+    <line x1="950" y1="120" x2="1010" y2="280" stroke="#3B82F6" stroke-width="1" stroke-dasharray="4" />
+    <line x1="1080" y1="80" x2="1010" y2="280" stroke="#34D399" stroke-width="1" />
+
+    <!-- Outer floating nodes -->
+    <circle cx="950" cy="120" r="6" fill="#3B82F6" filter="url(#glow)" />
+    <circle cx="1080" cy="80" r="8" fill="#60A5FA" filter="url(#glow)" />
+    <circle cx="1120" cy="220" r="10" fill="#34D399" filter="url(#glow)" />
+    <circle cx="1010" cy="280" r="7" fill="#60A5FA" filter="url(#glow)" />
+  </g>
+
+  <!-- Title / Name -->
+  <text x="80" y="160" font-family="'Outfit', 'Inter', system-ui, sans-serif" font-weight="900" font-size="64" fill="url(#textGrad)" letter-spacing="1">
+    ADITH SHAJEE
+  </text>
+
+  <!-- Tagline / Subtitle -->
+  <text x="85" y="215" font-family="'Fira Code', 'JetBrains Mono', monospace" font-weight="600" font-size="20" fill="#94A3B8" letter-spacing="2">
+    AI / ML Engineer &amp; Computer Vision Developer
+  </text>
+
+  <!-- Accent bullets -->
+  <text x="85" y="260" font-family="'Inter', system-ui, sans-serif" font-weight="500" font-size="16" fill="#64748B" letter-spacing="1">
+    • COMPUTER VISION  • GENERATIVE AI  • SCALABLE MLOPS  • B.TECH 2026
+  </text>
+
+  <!-- Abstract code decoration on the left corner -->
+  <text x="80" y="340" font-family="monospace" font-size="12" fill="#334155" opacity="0.7">
+    import torch; model = torch.hub.load('ultralytics/yolov8', 'custom')
+  </text>
+</svg>

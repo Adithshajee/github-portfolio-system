@@ -1,0 +1,39 @@
+name: Auto-Update Profile README
+
+on:
+  schedule:
+    # Run twice a day (every 12 hours)
+    - cron: "0 */12 * * *"
+  workflow_dispatch:
+  push:
+    paths:
+      - "automation/update_readme.py"
+      - "profile/README.md"
+
+permissions:
+  contents: write
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Fetch and Update Repositories List
+        run: |
+          python automation/update_readme.py
+
+      - name: Commit and Push changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add profile/README.md
+          git commit -m "chore: auto-update active projects section" || exit 0
+          git push
