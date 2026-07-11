@@ -1,0 +1,86 @@
+/* Import premium Outfit and JetBrains Mono fonts */
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code&family=Outfit:wght@300;400;500;700;900&display=swap');
+
+:root {
+  --md-text-font: 'Outfit', -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif;
+  --md-code-font: 'Fira Code', monospace;
+  
+  /* Premium Palette */
+  --color-primary-glow: rgba(59, 130, 246, 0.15);
+  --color-accent-glow: rgba(16, 185, 129, 0.15);
+}
+
+/* Glassmorphism Header */
+.md-header {
+  background-color: rgba(15, 23, 42, 0.8) !important;
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Modern Rounded Code Blocks with Subtle Glow */
+.md-typeset pre {
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.md-typeset pre:hover {
+  border-color: rgba(59, 130, 246, 0.4);
+  box-shadow: 0 4px 25px var(--color-primary-glow);
+}
+
+/* Premium Navigation Links */
+.md-nav__link {
+  transition: color 0.25s ease, padding-left 0.25s ease;
+}
+
+.md-nav__link:hover {
+  color: #3b82f6 !important;
+  padding-left: 6px;
+}
+
+/* Custom Styled Cards Grid for Index Page */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.grid-card {
+  background: rgba(30, 41, 59, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 24px;
+  text-decoration: none !important;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.grid-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(59, 130, 246, 0.5);
+  box-shadow: 0 10px 30px var(--color-primary-glow);
+}
+
+.grid-card h3 {
+  margin: 0 0 10px 0 !important;
+  font-size: 20px;
+  color: #3b82f6;
+  font-weight: 700;
+}
+
+.grid-card p {
+  margin: 0 !important;
+  font-size: 14px;
+  color: #94a3b8;
+  line-height: 1.5;
+}
+
+/* Glowing blockquotes */
+blockquote {
+  border-left: 4px solid #3b82f6 !important;
+  background: rgba(59, 130, 246, 0.05);
+  border-radius: 4px;
+  padding: 12px 20px;
+}

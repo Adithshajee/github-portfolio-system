@@ -1,28 +1,53 @@
 # GitHub Portfolio System (GPS)
 
-Welcome to the official documentation for the **GitHub Portfolio System (GPS)**. GPS is an open-source framework and personal branding system designed to automate, scale, and maintain a recruiter-grade GitHub presence.
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Adithshajee/github-portfolio-system/main/assets/profile-banner.svg">
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/Adithshajee/github-portfolio-system/main/assets/profile-banner.svg">
+  <img alt="GPS Banner" src="https://raw.githubusercontent.com/Adithshajee/github-portfolio-system/main/assets/profile-banner.svg" width="100%">
+</picture>
 
-This documentation serves as a comprehensive developer guide to configuring and deploying your engineering brand.
+<br>
+
+Welcome to the official developer portal for the **GitHub Portfolio System (GPS)**. GPS is a production-grade framework engineered to automate, standardize, and scale your personal coding portfolio and repository governance models.
 
 ---
 
 ## 🗺️ Documentation Directory
 
-Explore the following sections to understand and deploy the system:
+Use the cards below to navigate the guides:
 
-*   [**System Architecture**](architecture.md): The high-level design, components, and integration model.
-*   [**Setup Guide**](setup.md): Detailed steps to initialize the repository, configure secrets, and install dependencies.
-*   [**CI/CD Workflows**](ci-cd.md): Explanation of the automated GitHub Actions (Snake, Metrics, releases).
-*   [**Deployment Guide**](deployment.md): Steps to host the documentation site via GitHub Pages.
-*   [**Future Roadmap**](roadmap.md): The evolution path of GPS and integrating with external portfolios (Kaggle, Hugging Face, AetherOS).
+<div class="grid-container">
+  <a href="architecture.md" class="grid-card">
+    <h3>🏗️ System Architecture</h3>
+    <p>Explore data pipeline flows, component decouple models, and Mermaid schematic diagrams.</p>
+  </a>
+
+  <a href="setup.md" class="grid-card">
+    <h3>⚙️ Setup Guide</h3>
+    <p>Step-by-step instructions to clone the workspace, establish keys, and run validation gates.</p>
+  </a>
+
+  <a href="ci-cd.md" class="grid-card">
+    <h3>🚀 CI/CD Workflows</h3>
+    <p>Detailed guide on automated metrics calendars, contribution snake games, and CodeQL checks.</p>
+  </a>
+
+  <a href="deployment.md" class="grid-card">
+    <h3>🌐 Deployment Guide</h3>
+    <p>How to compile the static site and launch your documentation on GitHub Pages.</p>
+  </a>
+
+  <a href="roadmap.md" class="grid-card">
+    <h3>🔮 Future Roadmap</h3>
+    <p>Integration pathways for Hugging Face datasets, Kaggle stats, and the AetherOS ecosystem.</p>
+  </a>
+</div>
 
 ---
 
-## 🚀 Design Principles
+## 🚀 Design Philosophy
 
-Every component of GPS is engineered to adhere to these core guidelines:
-
-1.  **Truthful**: Highlights actual software engineering achievements, avoiding superficial fluff and bloated decorative badges.
-2.  **Automated**: Leverages GitHub Actions to keep stats, schedules, and active project listings updated dynamically.
-3.  **Clean & Accessible**: Light/dark mode compatibility with high readability.
-4.  **Extensible**: Modular structure so you can easily adapt templates for future projects.
+GPS is built to serve three core values:
+*   **Truthful Portfolio**: Focuses on real, high-impact project architectures (like custom YOLO decoupled layers) rather than decorative badge padding.
+*   **Automated Updates**: Restores time by keeping stats, Streaks, and active repositories in sync automatically.
+*   **Clean Design**: Built with complete dark/light theme support, accessible contrasting colors, and clean grid components.

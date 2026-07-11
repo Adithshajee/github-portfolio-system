@@ -24,3 +24,7 @@ nav:
   - CI/CD Workflows: ci-cd.md
   - Deployment Guide: deployment.md
   - Roadmap: roadmap.md
+
+extra_css:
+  - assets/custom.css
+
