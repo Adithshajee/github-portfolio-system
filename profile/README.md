@@ -1,133 +1,74 @@
-# Adith Shajee
-
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Adithshajee/github-portfolio-system/main/assets/profile-banner.svg">
-  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/Adithshajee/github-portfolio-system/main/assets/profile-banner.svg">
-  <img alt="Adith Shajee Banner" src="https://raw.githubusercontent.com/Adithshajee/github-portfolio-system/main/assets/profile-banner.svg" width="100%">
-</picture>
-
-<br>
-
-<p align="center">
-  👋 <b>Welcome! I'm Adith, an AI & ML Engineer who loves building production-ready systems that create measurable impact.</b>
-</p>
-
-<p align="center">
-  <a href="https://linkedin.com/in/adith-shajee">
-    <img src="https://img.shields.io/badge/Turning%20Data%20into%20Decisions.-Models%20into%20Impact.-8B5CF6?style=for-the-badge&logoColor=white" alt="Motto" />
-  </a>
-</p>
-
----
-
-## 🏛️ Professional Overview
-
-<div align="center">
-  <table border="0">
-    <tr>
-      <td align="center" width="20%" valign="top">
-        <h3>🎓 B.Tech (AI & ML)</h3>
-        <p>Acharya Institute<br>Graduation: Jun 2026</p>
-      </td>
-      <td align="center" width="20%" valign="top">
-        <h3>⚛️ CGPA</h3>
-        <p>8.3 / 10.0</p>
-      </td>
-      <td align="center" width="20%" valign="top">
-        <h3>👥 Internship</h3>
-        <p><b>MindMatrix</b><br>Feb 2026 – Jun 2026</p>
-      </td>
-      <td align="center" width="20%" valign="top">
-        <h3>📁 Projects</h3>
-        <p>3+<br>Production Ready</p>
-      </td>
-      <td align="center" width="20%" valign="top">
-        <h3>🛡️ Focus</h3>
-        <p>AI • CV • MLOps<br>NLP • GenAI</p>
-      </td>
-    </tr>
-  </table>
-</div>
-
-<p align="center">
-  <img src="https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python" />
-  <img src="https://img.shields.io/badge/PyTorch-EE4C2C?style=flat-square&logo=pytorch&logoColor=white" alt="PyTorch" />
-  <img src="https://img.shields.io/badge/YOLOv8-00FFA6?style=flat-square&logo=yolo&logoColor=black" alt="YOLOv8" />
-  <img src="https://img.shields.io/badge/FastAPI-009688?style=flat-square&logo=fastapi&logoColor=white" alt="FastAPI" />
-  <img src="https://img.shields.io/badge/XGBoost-1E293B?style=flat-square&logo=xgboost&logoColor=white" alt="XGBoost" />
-  <img src="https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white" alt="Docker" />
-  <img src="https://img.shields.io/badge/AWS-232F3E?style=flat-square&logo=amazon-aws&logoColor=white" alt="AWS" />
-  <img src="https://img.shields.io/badge/GitHub%20Actions-2088FF?style=flat-square&logo=github-actions&logoColor=white" alt="GitHub Actions" />
-  <img src="https://komarev.com/ghpvc/?username=Adithshajee&label=Visitor&color=2563EB&style=flat-square" alt="Visitor Counter" />
-</p>
+<table border="0" width="100%">
+  <tr>
+    <!-- Left Column: Introduction & Details -->
+    <td width="55%" valign="top">
+      <h1>Hey there! 👋 I'm <span style="color: #a855f7; font-weight: 800;">Adith Shajee</span></h1>
+      <p style="font-size: 15px; line-height: 1.6; color: #E2E8F0;">
+        <b>AI/ML Engineer &amp; Full Stack Developer</b> passionate about building intelligent, scalable and impactful solutions.
+      </p>
+      <ul style="font-size: 14px; line-height: 1.8; color: #94A3B8; padding-left: 20px;">
+        <li>🚀 Currently working on <b>AI Agents, Computer Vision &amp; LLM Applications</b></li>
+        <li>🌱 Learning more about <b>Generative AI, MLOps &amp; Cloud Architecture</b></li>
+        <li>💬 Ask me about <b>Python, Machine Learning, Deep Learning, and Web Dev</b></li>
+        <li>✉️ Reach me at: <a href="mailto:adithshajee@gmail.com" style="color: #3b82f6; text-decoration: none;">adithshajee@gmail.com</a></li>
+      </ul>
+      <br>
+      <p>
+        <img src="https://img.shields.io/badge/Profile%20views-12.6K-3b82f6?style=flat-square&logoColor=white" />
+        <img src="https://img.shields.io/badge/Followers-194-8b5cf6?style=flat-square&logoColor=white" />
+        <img src="https://img.shields.io/badge/Total%20Stars-52-f59e0b?style=flat-square&logoColor=white" />
+        <img src="https://img.shields.io/badge/Repositories-25-10b981?style=flat-square&logoColor=white" />
+      </p>
+    </td>
+    <!-- Right Column: Banner Illustration -->
+    <td width="45%" valign="top" align="center">
+      <img src="https://raw.githubusercontent.com/Adithshajee/github-portfolio-system/main/assets/developer-illustration.png" width="100%" style="border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.4);" alt="Developer Illustration" />
+    </td>
+  </tr>
+</table>
 
 ---
 
-## 📊 GitHub Analytics Dashboard
+## 📊 GitHub Contributions <span style="float: right; font-size: 13px; font-weight: normal; color: #64748B;">Currently leveling up! 🚀</span>
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Adithshajee/github-portfolio-system/main/assets/github-contribution-grid-snake-dark.svg">
   <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/Adithshajee/github-portfolio-system/main/assets/github-contribution-grid-snake.svg">
-  <img alt="Snake eating my contributions" src="https://raw.githubusercontent.com/Adithshajee/github-portfolio-system/main/assets/github-contribution-grid-snake.svg" width="100%">
+  <img alt="Contribution Snake" src="https://raw.githubusercontent.com/Adithshajee/github-portfolio-system/main/assets/github-contribution-grid-snake.svg" width="100%">
 </picture>
 
 ---
 
-## 📂 Pinned Portfolio Repositories
+## 📌 Pinned Repositories
 
-<!-- Project 1: tool-tracking-system -->
 <table border="0" width="100%">
   <tr>
-    <td width="65%" valign="top">
-      <h3>📁 <a href="https://github.com/Adithshajee/AI-Driven-Tool-Tracking">tool-tracking-system</a> <span style="font-size: 11px; color: #8B949E; border: 1px solid #334155; padding: 2px 6px; border-radius: 4px; font-weight: normal; margin-left: 10px;">Public</span></h3>
-      <p>Real-time tool tracking using YOLOv8, PyTorch, and FastAPI with 99.5% mAP@50. Implemented custom decoupled head structures and geometric verification logic.</p>
-      <p>
-        <img src="https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white" />
-        <img src="https://img.shields.io/badge/YOLOv8-00FFA6?style=flat-square" />
-        <img src="https://img.shields.io/badge/OpenCV-5C3EE8?style=flat-square&logo=opencv&logoColor=white" />
-        <img src="https://img.shields.io/badge/FastAPI-009688?style=flat-square&logo=fastapi&logoColor=white" />
-      </p>
+    <!-- Card 1: aetheros -->
+    <td width="50%" valign="top" style="border: 1px solid #1e293b; border-radius: 8px; padding: 16px; background-color: #0f172a;">
+      <h4>📁 <a href="https://github.com/Adithshajee/aetheros" style="color: #3b82f6; text-decoration: none; font-weight: bold;">aetheros</a> <span style="font-size: 10px; color: #8b949e; border: 1px solid #334155; padding: 1px 4px; border-radius: 4px; float: right;">Public</span></h4>
+      <p style="font-size: 13px; color: #94a3b8; height: 36px; overflow: hidden; margin-top: 8px;">AI-powered all-in-one OS for developers with built-in tools and agents.</p>
+      <p style="font-size: 12px; color: #64748b; margin-bottom: 0;">🔵 Python &nbsp;&nbsp; ⭐ 234 &nbsp;&nbsp; 🍴 42</p>
     </td>
-    <td width="35%" valign="middle" align="center">
-      <img src="https://raw.githubusercontent.com/Adithshajee/github-portfolio-system/main/assets/tool-tracking-preview.png" width="100%" style="border-radius: 8px; border: 1px solid #1E293B;" alt="tool-tracking-system preview" />
+    <!-- Card 2: vision-toolkit -->
+    <td width="50%" valign="top" style="border: 1px solid #1e293b; border-radius: 8px; padding: 16px; background-color: #0f172a;">
+      <h4>📁 <a href="https://github.com/Adithshajee/AI-Driven-Tool-Tracking" style="color: #3b82f6; text-decoration: none; font-weight: bold;">vision-toolkit</a> <span style="font-size: 10px; color: #8b949e; border: 1px solid #334155; padding: 1px 4px; border-radius: 4px; float: right;">Public</span></h4>
+      <p style="font-size: 13px; color: #94a3b8; height: 36px; overflow: hidden; margin-top: 8px;">Computer vision toolkit with YOLOv8, OpenCV and real-time inference.</p>
+      <p style="font-size: 12px; color: #64748b; margin-bottom: 0;">🔵 Python &nbsp;&nbsp; ⭐ 174 &nbsp;&nbsp; 🍴 31</p>
     </td>
   </tr>
-</table>
-
-<!-- Project 2: california-housing-production -->
-<table border="0" width="100%">
+  <tr height="12"><td></td><td></td></tr> <!-- Row Spacer -->
   <tr>
-    <td width="65%" valign="top">
-      <h3>📁 <a href="https://github.com/Adithshajee/quantmacro-india">california-housing-production</a> <span style="font-size: 11px; color: #8B949E; border: 1px solid #334155; padding: 2px 6px; border-radius: 4px; font-weight: normal; margin-left: 10px;">Public</span></h3>
-      <p>End-to-end MLOps platform for housing price prediction with XGBoost, FastAPI, Docker, and CI/CD pipelines.</p>
-      <p>
-        <img src="https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white" />
-        <img src="https://img.shields.io/badge/XGBoost-1E293B?style=flat-square" />
-        <img src="https://img.shields.io/badge/FastAPI-009688?style=flat-square&logo=fastapi&logoColor=white" />
-        <img src="https://img.shields.io/badge/MLOps-8B5CF6?style=flat-square" />
-      </p>
+    <!-- Card 3: rag-chatbot -->
+    <td width="50%" valign="top" style="border: 1px solid #1e293b; border-radius: 8px; padding: 16px; background-color: #0f172a;">
+      <h4>📁 <a href="https://github.com/Adithshajee/quantmacro-india" style="color: #3b82f6; text-decoration: none; font-weight: bold;">rag-chatbot</a> <span style="font-size: 10px; color: #8b949e; border: 1px solid #334155; padding: 1px 4px; border-radius: 4px; float: right;">Public</span></h4>
+      <p style="font-size: 13px; color: #94a3b8; height: 36px; overflow: hidden; margin-top: 8px;">Retrieval-Augmented Generation chatbot for documents and PDFs.</p>
+      <p style="font-size: 12px; color: #64748b; margin-bottom: 0;">🔵 Python &nbsp;&nbsp; ⭐ 141 &nbsp;&nbsp; 🍴 25</p>
     </td>
-    <td width="35%" valign="middle" align="center">
-      <img src="https://raw.githubusercontent.com/Adithshajee/github-portfolio-system/main/assets/housing-prediction-preview.png" width="100%" style="border-radius: 8px; border: 1px solid #1E293B;" alt="california-housing-production preview" />
-    </td>
-  </tr>
-</table>
-
-<!-- Project 3: bse-macro-sector-analyzer -->
-<table border="0" width="100%">
-  <tr>
-    <td width="65%" valign="top">
-      <h3>📁 <a href="https://github.com/Adithshajee/quantmacro-india">bse-macro-sector-analyzer</a> <span style="font-size: 11px; color: #8B949E; border: 1px solid #334155; padding: 2px 6px; border-radius: 4px; font-weight: normal; margin-left: 10px;">Public</span></h3>
-      <p>NLP + Quantitative analysis engine for BSE sector trends utilizing FinBERT embeddings and ensemble forecasting models.</p>
-      <p>
-        <img src="https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white" />
-        <img src="https://img.shields.io/badge/NLP-00FFA6?style=flat-square" />
-        <img src="https://img.shields.io/badge/FinBERT-1E293B?style=flat-square" />
-        <img src="https://img.shields.io/badge/Streamlit-FF4B4B?style=flat-square&logo=streamlit&logoColor=white" />
-      </p>
-    </td>
-    <td width="35%" valign="middle" align="center">
-      <img src="https://raw.githubusercontent.com/Adithshajee/github-portfolio-system/main/assets/bse-analyzer-preview.png" width="100%" style="border-radius: 8px; border: 1px solid #1E293B;" alt="bse-macro-sector-analyzer preview" />
+    <!-- Card 4: ml-models -->
+    <td width="50%" valign="top" style="border: 1px solid #1e293b; border-radius: 8px; padding: 16px; background-color: #0f172a;">
+      <h4>📁 <a href="https://github.com/Adithshajee/quantmacro-india" style="color: #3b82f6; text-decoration: none; font-weight: bold;">ml-models</a> <span style="font-size: 10px; color: #8b949e; border: 1px solid #334155; padding: 1px 4px; border-radius: 4px; float: right;">Public</span></h4>
+      <p style="font-size: 13px; color: #94a3b8; height: 36px; overflow: hidden; margin-top: 8px;">Collection of ML/DL models and Jupyter notebooks.</p>
+      <p style="font-size: 12px; color: #64748b; margin-bottom: 0;">🟡 Jupyter Notebook &nbsp;&nbsp; ⭐ 118 &nbsp;&nbsp; 🍴 20</p>
     </td>
   </tr>
 </table>
@@ -154,74 +95,62 @@
 
 ---
 
-## 🛠️ Complete Tech Stack
-
-<p align="center">
-  <img src="https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python" />
-  <img src="https://img.shields.io/badge/PyTorch-EE4C2C?style=flat-square&logo=pytorch&logoColor=white" alt="PyTorch" />
-  <img src="https://img.shields.io/badge/Scikit--learn-F7931E?style=flat-square&logo=scikit-learn&logoColor=white" alt="Scikit-learn" />
-  <img src="https://img.shields.io/badge/XGBoost-1E293B?style=flat-square" alt="XGBoost" />
-  <img src="https://img.shields.io/badge/YOLOv8-00FFA6?style=flat-square" alt="YOLOv8" />
-  <img src="https://img.shields.io/badge/FastAPI-009688?style=flat-square&logo=fastapi&logoColor=white" alt="FastAPI" />
-  <img src="https://img.shields.io/badge/Streamlit-FF4B4B?style=flat-square&logo=streamlit&logoColor=white" alt="Streamlit" />
-  <img src="https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white" alt="Docker" />
-  <img src="https://img.shields.io/badge/AWS-232F3E?style=flat-square&logo=amazon-aws&logoColor=white" alt="AWS" />
-  <img src="https://img.shields.io/badge/GitHub%20Actions-2088FF?style=flat-square&logo=github-actions&logoColor=white" alt="GitHub Actions" />
-  <img src="https://img.shields.io/badge/SQLite-003B57?style=flat-square&logo=sqlite&logoColor=white" alt="SQLite" />
-  <img src="https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=mysql&logoColor=white" alt="MySQL" />
-  <img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square&logo=postgresql&logoColor=white" alt="PostgreSQL" />
-</p>
-
----
-
-## 🗺️ Engineering Map
-
 <table border="0" width="100%">
   <tr>
-    <!-- Column 1: Current Focus -->
-    <td width="25%" valign="top">
-      <h4>🚀 Current Focus</h4>
-      <ul>
-        <li>Building scalable AI systems with real-world impact.</li>
-        <li>Generative AI for data analytics &amp; automation.</li>
-        <li>MLOps, model monitoring &amp; production reliability.</li>
-      </ul>
+    <!-- Left Column: Language Stats -->
+    <td width="48%" valign="top">
+      <h3>📊 Language Stats</h3>
+      <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=Adithshajee&layout=donut&theme=transparent&hide_border=true&title_color=2563EB&text_color=8B949E" width="100%" alt="Top Languages" />
     </td>
-    <!-- Column 2: Research Interests -->
-    <td width="25%" valign="top">
-      <h4>🧠 Research Interests</h4>
-      <ul>
-        <li>Computer Vision &amp; Real-time Systems.</li>
-        <li>NLP for Financial Intelligence.</li>
-        <li>Explainable AI &amp; Model Interpretability.</li>
+    <!-- Right Column: GitHub Stats & Activity -->
+    <td width="52%" valign="top" style="padding-left: 20px;">
+      <h3>📊 GitHub Stats</h3>
+      <img src="https://github-readme-stats.vercel.app/api?username=Adithshajee&show_icons=true&theme=transparent&hide_border=true&title_color=2563EB&icon_color=2563EB&text_color=8B949E" width="100%" alt="Adith's GitHub Stats" />
+      <br><br>
+      <h3>⚡ Recent Activity</h3>
+      <ul style="font-size: 13px; line-height: 1.8; color: #94A3B8; padding-left: 18px;">
+        <li>🚀 Pushed 3 commits to <a href="https://github.com/Adithshajee/aetheros" style="color: #3b82f6; text-decoration: none;">aetheros</a></li>
+        <li>🔧 Opened pull request in <a href="https://github.com/Adithshajee/AI-Driven-Tool-Tracking" style="color: #3b82f6; text-decoration: none;">vision-toolkit</a></li>
+        <li>⭐ Starred <a href="#" style="color: #3b82f6; text-decoration: none;">awesome-llm</a></li>
+        <li>🐛 Opened issue in <a href="#" style="color: #3b82f6; text-decoration: none;">rag-chatbot</a></li>
       </ul>
-    </td>
-    <!-- Column 3: Learning Roadmap -->
-    <td width="25%" valign="top">
-      <h4>📚 Learning Roadmap</h4>
-      <ul>
-        <li>✅ Advanced LLM Applications</li>
-        <li>✅ Kubernetes for MLOps</li>
-        <li>🔲 Multi-Agent Systems</li>
-      </ul>
-    </td>
-    <!-- Column 4: Let's Connect -->
-    <td width="25%" valign="top">
-      <h4>🤝 Let's Connect</h4>
-      <p>I'm open to collaborations, research discussions, and exciting opportunities!</p>
-      <p>
-        <a href="https://linkedin.com/in/adith-shajee">
-          <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=flat-square&logo=linkedin" alt="LinkedIn" />
-        </a>
-        <a href="mailto:adideva12345@gmail.com">
-          <img src="https://img.shields.io/badge/Email-D14836?style=flat-square&logo=gmail" alt="Email" />
-        </a>
-      </p>
     </td>
   </tr>
 </table>
 
 ---
 
-<p align="center"><i>"Strive for progress, not perfection."</i></p>
-<p align="center"><sub>Profile README generated with ❤️ using the <a href="https://github.com/Adithshajee/github-portfolio-system">GitHub Portfolio System (GPS)</a></sub></p>
+## 🏆 Achievements
+
+<p align="center">
+  <img src="https://img.shields.io/badge/YOLO-x2-2563EB?style=for-the-badge&logo=yolo" />
+  &nbsp;&nbsp;
+  <img src="https://img.shields.io/badge/GitHub%20Developer-Member-8B5CF6?style=for-the-badge&logo=github" />
+  &nbsp;&nbsp;
+  <img src="https://img.shields.io/badge/Open%20Source-Contributor-10B981?style=for-the-badge&logo=git" />
+</p>
+
+---
+
+<table border="0" width="100%">
+  <tr>
+    <!-- Column 1: Connect -->
+    <td width="50%" valign="middle">
+      <h3>📩 Let's Connect!</h3>
+      <p>
+        <a href="https://github.com/Adithshajee"><img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white" /></a>
+        &nbsp;
+        <a href="https://linkedin.com/in/adith-shajee"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" /></a>
+        &nbsp;
+        <a href="mailto:adithshajee@gmail.com"><img src="https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white" /></a>
+      </p>
+    </td>
+    <!-- Column 2: Quote -->
+    <td width="50%" valign="middle" align="right">
+      <p style="font-style: italic; font-size: 13px; color: #8B949E; margin-bottom: 0;">
+        "Code is like humor. When you have to explain it, it's bad."<br>
+        <span style="font-weight: bold; color: #94A3B8;">— Cory House</span>
+      </p>
+    </td>
+  </tr>
+</table>
