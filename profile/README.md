@@ -138,15 +138,13 @@
 
 ### 📂 Active Projects & Repositories
 
-- **[github-portfolio-system](https://github.com/Adithshajee/github-portfolio-system)** - *Updated 2026-07-14*
+- **[github-portfolio-system](https://github.com/Adithshajee/github-portfolio-system)** — *Updated 2026-07-14*
   > No description provided.
   > 🌟 `0` | 🍴 `0`
-
-- **[quantmacro-india](https://github.com/Adithshajee/quantmacro-india)** - *Updated 2026-07-11*
+- **[quantmacro-india](https://github.com/Adithshajee/quantmacro-india)** — *Updated 2026-07-11*
   > No description provided.
   > 🌟 `0` | 🍴 `0`
-
-- **[AI-Driven-Tool-Tracking](https://github.com/Adithshajee/AI-Driven-Tool-Tracking)** - *Updated 2025-12-10*
+- **[AI-Driven-Tool-Tracking](https://github.com/Adithshajee/AI-Driven-Tool-Tracking)** — *Updated 2025-12-10*
   > AI-Driven Predictive Maintenance and Vision-Based Tool Tracking System for Industrial Applications
   > 🌟 `0` | 🍴 `0`
 
