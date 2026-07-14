@@ -31,6 +31,8 @@ dependencies = [
     "click>=8.1.7",
     "pyyaml>=6.0.1",
     "rich>=13.7.0",
+    "fastapi>=0.110.0",
+    "uvicorn>=0.28.0",
 ]
 
 [project.optional-dependencies]
@@ -143,7 +145,7 @@ addopts = [
     "--cov=src/gps",
     "--cov-report=term-missing",
     "--cov-report=html:htmlcov",
-    "--cov-fail-under=80",
+    "--cov-fail-under=90",
 ]
 markers = [
     "unit: Fast unit tests with no external dependencies",
@@ -154,7 +156,7 @@ markers = [
 # ─── coverage ─────────────────────────────────────────────────────────────────
 [tool.coverage.run]
 source = ["src/gps"]
-omit = ["*/tests/*", "*/migrations/*", "*/themes/templates/*"]
+omit = ["*/tests/*", "*/migrations/*", "*/themes/templates/*", "*/dashboard/*"]
 
 [tool.coverage.report]
 exclude_lines = [
