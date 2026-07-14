@@ -1,0 +1,114 @@
+# GPS — Platform Configuration
+# This file configures the Developer Identity Platform.
+# Sensitive values (API tokens) must NEVER be placed here.
+# Use environment variables: GH_PAT, HF_TOKEN, KAGGLE_KEY, etc.
+
+platform:
+  # Your primary developer identifier (GitHub username)
+  username: "Adithshajee"
+
+  # Path to your profile README relative to the repo root
+  readme_path: "profile/README.md"
+
+  # Timezone for timestamp formatting (IANA format)
+  timezone: "Asia/Kolkata"
+
+# ─── Providers ────────────────────────────────────────────────────────────────
+providers:
+  github:
+    enabled: true
+    # Maximum repos to display in the auto-updated section
+    repo_count: 5
+    # Include pinned repositories (requires GraphQL / GitHub token)
+    include_pinned: true
+    # Exclude forked repositories
+    exclude_forks: true
+    # Exclude archived repositories
+    exclude_archived: true
+    # Topics to filter by (empty = include all)
+    filter_topics: []
+
+  huggingface:
+    # Enable when you want HF models/spaces/datasets in your profile
+    enabled: false
+    username: ""
+    # Maximum models to display
+    model_count: 5
+    # Maximum spaces to display
+    space_count: 3
+
+  kaggle:
+    # Enable when you want Kaggle competition stats in your profile
+    enabled: false
+    username: ""
+
+  linkedin:
+    # LinkedIn's official API has strict restrictions.
+    # Manual updates only — see docs/providers/linkedin.md
+    enabled: false
+
+# ─── Output Formats ───────────────────────────────────────────────────────────
+outputs:
+  # Write updated markdown to readme_path
+  markdown: true
+  # Export structured data to profile/data.json
+  json: false
+  # Export rendered HTML to profile/index.html
+  html: false
+
+# ─── Section Configuration ────────────────────────────────────────────────────
+sections:
+  # Control which sections appear and their order
+  order:
+    - hero
+    - professional_overview
+    - skills
+    - analytics
+    - featured_projects
+    - active_repos
+    - tech_stack
+    - engineering_map
+    - contact
+
+  # Enable/disable individual sections
+  hero:
+    enabled: true
+  professional_overview:
+    enabled: true
+  skills:
+    enabled: true
+  analytics:
+    enabled: true
+    show_snake: true
+    show_metrics: true
+  featured_projects:
+    enabled: true
+  active_repos:
+    enabled: true
+    # Marker pair in your README for auto-injection
+    start_marker: "<!-- REPOS_START -->"
+    end_marker: "<!-- REPOS_END -->"
+  tech_stack:
+    enabled: true
+  engineering_map:
+    enabled: true
+  contact:
+    enabled: true
+
+# ─── HTTP Client Settings ─────────────────────────────────────────────────────
+http:
+  # Request timeout in seconds
+  timeout: 15
+  # Maximum retry attempts on transient failures
+  max_retries: 3
+  # Initial retry delay in seconds (exponential backoff)
+  retry_delay: 1.0
+  # Minimum remaining rate limit before pausing
+  rate_limit_threshold: 10
+
+# ─── Logging ─────────────────────────────────────────────────────────────────
+logging:
+  # DEBUG, INFO, WARNING, ERROR
+  level: "INFO"
+  # Enable structured JSON logging (useful for CI)
+  json_format: false

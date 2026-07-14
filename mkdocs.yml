@@ -1,30 +1,120 @@
-site_name: GitHub Portfolio System
-site_description: A production-grade framework for automating and maintaining professional GitHub portfolios.
+site_name: GitHub Portfolio System (GPS)
+site_description: A production-grade Developer Identity Platform for automating and scaling your GitHub portfolio across GitHub, Hugging Face, Kaggle, and more.
 site_author: Adith Shajee
+site_url: https://adithshajee.github.io/github-portfolio-system/
 repo_url: https://github.com/Adithshajee/github-portfolio-system
+repo_name: Adithshajee/github-portfolio-system
+edit_uri: edit/main/docs/
+
+copyright: Copyright &copy; 2026 Adith Shajee — MIT License
 
 theme:
   name: material
   palette:
-    - scheme: default
+    # Light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
       primary: blue
-      accent: blue
-    - scheme: slate
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    # Dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
       primary: blue
-      accent: blue
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
   features:
     - navigation.tabs
+    - navigation.tabs.sticky
     - navigation.sections
+    - navigation.expand
+    - navigation.indexes
+    - navigation.top
+    - navigation.footer
     - search.suggest
+    - search.highlight
+    - search.share
+    - content.tabs.link
+    - content.code.annotate
+    - content.code.copy
+    - content.action.edit
+    - toc.follow
+
+  font:
+    text: Inter
+    code: JetBrains Mono
+
+  icon:
+    repo: fontawesome/brands/github
+    logo: material/rocket-launch
+
+plugins:
+  - search:
+      lang: en
+  - git-revision-date-localized:
+      enable_creation_date: true
+      type: timeago
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+      toc_depth: 3
 
 nav:
   - Home: index.md
-  - Architecture: architecture.md
-  - Setup Guide: setup.md
-  - CI/CD Workflows: ci-cd.md
-  - Deployment Guide: deployment.md
-  - Roadmap: roadmap.md
+  - Getting Started:
+    - Setup Guide: setup.md
+    - Architecture: architecture.md
+  - Providers:
+    - GitHub: providers/github.md
+    - Hugging Face: providers/huggingface.md
+    - Kaggle: providers/kaggle.md
+  - Reference:
+    - CI/CD Workflows: ci-cd.md
+    - Deployment Guide: deployment.md
+    - API Reference: api-reference.md
+    - Design Decisions: design-decisions.md
+  - Community:
+    - Contributing: contributing.md
+    - Security: security.md
+    - FAQ: faq.md
+    - Troubleshooting: troubleshooting.md
+    - Roadmap: roadmap.md
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/Adithshajee
+      name: GitHub Profile
+    - icon: fontawesome/brands/linkedin
+      link: https://linkedin.com/in/adith-shajee
+      name: LinkedIn
 
 extra_css:
   - assets/custom.css
-

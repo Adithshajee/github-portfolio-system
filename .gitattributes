@@ -1,0 +1,38 @@
+# Enforce LF line endings for all text files
+* text=auto eol=lf
+
+# Binary assets — no line ending conversion
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.svg binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary
+
+# Linguist — mark generated/vendor assets
+assets/*.svg linguist-generated=true
+assets/*.png linguist-generated=false
+
+# Python
+*.py text eol=lf
+*.pyi text eol=lf
+
+# Configuration
+*.yml text eol=lf
+*.yaml text eol=lf
+*.toml text eol=lf
+*.json text eol=lf
+*.cfg text eol=lf
+*.ini text eol=lf
+
+# Documentation
+*.md text eol=lf
+*.rst text eol=lf
+
+# Shell
+*.sh text eol=lf
+Makefile text eol=lf

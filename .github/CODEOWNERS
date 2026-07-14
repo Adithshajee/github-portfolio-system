@@ -1,0 +1,20 @@
+# CODEOWNERS
+# Defines automatic review assignment for all pull requests.
+# See: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Global: All files require review from the maintainer
+* @Adithshajee
+
+# Python source — always requires maintainer review
+/src/ @Adithshajee
+/tests/ @Adithshajee
+
+# GitHub Actions — security-sensitive
+/.github/workflows/ @Adithshajee
+/.github/ @Adithshajee
+
+# Profile README — reviewed before any automated changes
+/profile/ @Adithshajee
+
+# Documentation
+/docs/ @Adithshajee

@@ -1,37 +1,57 @@
-name: Deploy Documentation Site
+name: "Deploy Documentation Site"
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
     paths:
       - "docs/**"
       - "mkdocs.yml"
       - "requirements.txt"
+      - "pyproject.toml"
       - ".github/workflows/deploy_docs.yml"
   workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: write
 
 jobs:
   deploy:
+    name: Deploy MkDocs to GitHub Pages
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history needed for git-revision-date plugin
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.10"
+          python-version: "3.11"
+          cache: "pip"
 
-      - name: Install dependencies
+      - name: Install documentation dependencies
         run: |
-          pip install -r requirements.txt
+          pip install mkdocs-material>=9.5.27 \
+                      mkdocs-git-revision-date-localized-plugin>=1.2.6 \
+                      mike>=2.1.1
 
-      - name: Deploy MkDocs to GitHub Pages
+      - name: Configure Git for deployment
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          mike deploy --deploy-prefix dist -p -u latest || mkdocs gh-deploy --force
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+
+      - name: Deploy to GitHub Pages
+        run: mkdocs gh-deploy --force --clean
+
+      - name: Write Job Summary
+        if: always()
+        run: |
+          echo "## Documentation Deployment" >> $GITHUB_STEP_SUMMARY
+          echo "- **Status**: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **URL**: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/" >> $GITHUB_STEP_SUMMARY

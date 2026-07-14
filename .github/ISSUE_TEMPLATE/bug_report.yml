@@ -1,0 +1,108 @@
+name: "🐛 Bug Report"
+description: "Report a bug or unexpected behavior in GPS"
+title: "[Bug]: "
+labels: ["bug", "triage"]
+assignees: ["Adithshajee"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for taking the time to report a bug. Please fill in the information below to help us diagnose and fix the issue.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: "Bug Description"
+      description: "A clear and concise description of what the bug is."
+      placeholder: "When I run `gps run`, it fails with..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: "Steps to Reproduce"
+      description: "Steps to reproduce the behavior."
+      value: |
+        1. Configure `gps.yml` with...
+        2. Run `gps run`
+        3. See error...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: "Expected Behavior"
+      description: "What did you expect to happen?"
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: "Actual Behavior"
+      description: "What actually happened? Include any error messages or stack traces."
+    validations:
+      required: true
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: "Affected Component"
+      options:
+        - "GPS CLI (gps run / validate / status / export)"
+        - "GitHub Provider"
+        - "Hugging Face Provider"
+        - "Kaggle Provider"
+        - "Renderer (README injection)"
+        - "Configuration (gps.yml)"
+        - "GitHub Actions Workflow"
+        - "MkDocs Documentation"
+        - "Other"
+    validations:
+      required: true
+
+  - type: input
+    id: gps-version
+    attributes:
+      label: "GPS Version"
+      description: "Run `gps --version` and paste the output."
+      placeholder: "GPS 2.0.0"
+    validations:
+      required: true
+
+  - type: input
+    id: python-version
+    attributes:
+      label: "Python Version"
+      placeholder: "Python 3.11.5"
+    validations:
+      required: true
+
+  - type: input
+    id: os
+    attributes:
+      label: "Operating System"
+      placeholder: "Ubuntu 22.04 / macOS 14 / Windows 11"
+    validations:
+      required: true
+
+  - type: textarea
+    id: config
+    attributes:
+      label: "Configuration (gps.yml)"
+      description: "Paste your `gps.yml` (remove any sensitive values)."
+      render: yaml
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: "Pre-submission Checklist"
+      options:
+        - label: "I searched for existing issues and this is not a duplicate."
+          required: true
+        - label: "I ran `gps validate` and it passed / I am reporting that it failed."
+          required: true
+        - label: "I removed all sensitive values (tokens, keys) from this report."
+          required: true

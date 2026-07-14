@@ -1,0 +1,81 @@
+name: "GPS — Onboarding & Bootstrap"
+
+on:
+  workflow_dispatch:
+    inputs:
+      username:
+        description: "Primary GitHub username"
+        required: true
+        type: string
+      theme:
+        description: "Portfolio layout theme"
+        required: true
+        type: choice
+        options:
+          - swe_general
+          - ai_ml
+          - devops
+        default: swe_general
+      hf_user:
+        description: "Hugging Face username (optional)"
+        required: false
+        type: string
+      kaggle_user:
+        description: "Kaggle username (optional)"
+        required: false
+        type: string
+      leetcode_user:
+        description: "LeetCode username (optional)"
+        required: false
+        type: string
+      blog_url:
+        description: "Blog RSS Feed URL (optional)"
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  bootstrap:
+    name: Scaffold & Synchronize Portfolio
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          pip install -e .
+
+      - name: Initialize GPS Configuration
+        run: |
+          gps init --non-interactive \
+            -u "${{ inputs.username }}" \
+            -t "${{ inputs.theme }}" \
+            --hf-user "${{ inputs.hf_user }}" \
+            --kaggle-user "${{ inputs.kaggle_user }}" \
+            --leetcode-user "${{ inputs.leetcode_user }}" \
+            --blog-url "${{ inputs.blog_url }}" \
+            --force
+
+      - name: First Run Sync
+        run: |
+          gps run
+        env:
+          GH_PAT: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit Scaffolding
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add gps.yml profile/README.md
+          git commit -m "chore: bootstrap GPS v3 configuration [skip ci]" || exit 0
+          git push origin main

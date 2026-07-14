@@ -1,19 +1,25 @@
-name: Generate Contribution Snake
+name: "Generate Contribution Snake"
 
 on:
   schedule:
-    # Run once every 24 hours
+    # Run once every 24 hours at midnight UTC
     - cron: "0 0 * * *"
   workflow_dispatch:
   push:
-    branches:
-      - main
+    branches: [main]
+    paths:
+      - ".github/workflows/snake.yml"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: write
 
 jobs:
   generate:
+    name: Generate Contribution Grid Snake
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
@@ -31,8 +37,17 @@ jobs:
 
       - name: Commit and Push changes
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git diff --quiet && echo "No changes to commit" && exit 0
           git add assets/github-contribution-grid-snake.svg assets/github-contribution-grid-snake-dark.svg
-          git commit -m "chore: update contribution snake animations" || exit 0
+          git commit -m "chore(assets): update contribution snake animations [skip ci]"
           git push
+
+      - name: Write Job Summary
+        if: always()
+        run: |
+          echo "## Snake Generation" >> $GITHUB_STEP_SUMMARY
+          echo "- **Status**: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Light**: assets/github-contribution-grid-snake.svg" >> $GITHUB_STEP_SUMMARY
+          echo "- **Dark**: assets/github-contribution-grid-snake-dark.svg" >> $GITHUB_STEP_SUMMARY

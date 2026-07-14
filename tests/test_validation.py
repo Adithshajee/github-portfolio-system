@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
 import os
 import sys
-import re
 import unittest
-import urllib.parse
 
 # Add parent directory to sys.path so automation package can be imported
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from automation.update_readme import fetch_latest_repos, format_repos_markdown
+from automation.update_readme import format_repos_markdown
 
 
 class TestGPSValidation(unittest.TestCase):
@@ -32,9 +30,7 @@ class TestGPSValidation(unittest.TestCase):
         ]
         for d in core_dirs:
             full_path = os.path.join(self.workspace_dir, d)
-            self.assertTrue(
-                os.path.isdir(full_path), f"Required directory {d} is missing."
-            )
+            self.assertTrue(os.path.isdir(full_path), f"Required directory {d} is missing.")
 
     def test_yaml_syntax_basic(self):
         """Verify that workflow YAML configs have basic structural keywords."""
@@ -42,7 +38,7 @@ class TestGPSValidation(unittest.TestCase):
         for fn in os.listdir(workflow_dir):
             if fn.endswith(".yml") or fn.endswith(".yaml"):
                 path = os.path.join(workflow_dir, fn)
-                with open(path, "r", encoding="utf-8") as f:
+                with open(path, encoding="utf-8") as f:
                     content = f.read()
                     self.assertTrue(
                         "name:" in content or "on:" in content,

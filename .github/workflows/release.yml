@@ -1,4 +1,4 @@
-name: Release Engineering
+name: "Release Engineering"
 
 on:
   push:
@@ -10,29 +10,81 @@ permissions:
 
 jobs:
   release:
-    name: Create Release
+    name: Create GitHub Release
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Read Changelog Entry
-        id: get_changelog
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Extract Version from Tag
+        id: version
         run: |
-          # Extract release notes for the tag from CHANGELOG.md
-          TAG_VERSION=${GITHUB_REF#refs/tags/v}
-          echo "Processing release notes for version $TAG_VERSION"
-          # Try to get changes under this version header
-          sed -n "/## \[$TAG_VERSION\]/,/## /p" CHANGELOG.md | sed '$d' > release_notes.txt
+          TAG="${GITHUB_REF#refs/tags/v}"
+          echo "version=${TAG}" >> $GITHUB_OUTPUT
+          echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+      - name: Extract Release Notes from CHANGELOG.md
+        id: changelog
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          python3 - <<'EOF'
+          import os, re, sys
+
+          version = os.environ.get("VERSION", "")
+          try:
+              with open("CHANGELOG.md", "r", encoding="utf-8") as f:
+                  content = f.read()
+
+              # Match section for this version: ## [X.Y.Z]
+              pattern = rf"## \[{re.escape(version)}\].*?(?=\n## |\Z)"
+              match = re.search(pattern, content, re.DOTALL)
+
+              if match:
+                  notes = match.group(0).strip()
+              else:
+                  notes = f"Release v{version}\n\nSee [CHANGELOG.md](CHANGELOG.md) for details."
+
+              with open("release_notes.txt", "w", encoding="utf-8") as f:
+                  f.write(notes)
+              print(f"Extracted release notes for v{version}")
+          except Exception as e:
+              print(f"Warning: Could not parse CHANGELOG: {e}", file=sys.stderr)
+              with open("release_notes.txt", "w", encoding="utf-8") as f:
+                  f.write(f"Release v{version}\n\nSee [CHANGELOG.md](CHANGELOG.md) for details.")
+          EOF
+
+      - name: Validate Release Notes
+        run: |
+          if [ ! -s release_notes.txt ]; then
+            echo "## Release ${{ steps.version.outputs.tag }}" > release_notes.txt
+            echo "" >> release_notes.txt
+            echo "See [CHANGELOG.md](CHANGELOG.md) for full details." >> release_notes.txt
+          fi
           cat release_notes.txt
 
-      - name: Generate Draft Release
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           body_path: release_notes.txt
           draft: false
-          prerelease: false
+          prerelease: ${{ contains(github.ref, '-alpha') || contains(github.ref, '-beta') || contains(github.ref, '-rc') }}
+          generate_release_notes: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Write Job Summary
+        if: always()
+        run: |
+          echo "## Release ${{ steps.version.outputs.tag }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Status**: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Version**: ${{ steps.version.outputs.version }}" >> $GITHUB_STEP_SUMMARY

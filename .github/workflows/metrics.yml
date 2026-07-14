@@ -1,42 +1,59 @@
-name: Generate GitHub Metrics
+name: "Generate GitHub Metrics"
 
 on:
   schedule:
-    # Run once every 24 hours
+    # Run once every 24 hours at 01:00 UTC
     - cron: "0 1 * * *"
   workflow_dispatch:
   push:
-    branches:
-      - main
+    branches: [main]
+    paths:
+      - ".github/workflows/metrics.yml"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: write
 
 jobs:
   metrics:
+    name: Render GitHub Metrics
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
       - name: Render GitHub Metrics
-        uses: lowlighter/metrics@latest
+        # Pinned to a specific commit SHA for supply chain security.
+        # To update: check https://github.com/lowlighter/metrics/releases
+        uses: lowlighter/metrics@65a3a3f31ba25b49cd254da37a54de0e0f79b128 # v3.34
         with:
           token: ${{ secrets.METRICS_TOKEN || secrets.GITHUB_TOKEN }}
           user: ${{ github.repository_owner }}
           template: classic
           base: header, activity, community, repositories, metadata
           config_timezone: Asia/Kolkata
-          
-          # Plugin configurations
+
+          # Language statistics
           plugin_languages: yes
           plugin_languages_colors: github
           plugin_languages_limit: 8
           plugin_languages_details: bytes-size, percentage
-          
+
+          # Achievements
           plugin_achievements: yes
           plugin_achievements_threshold: C
           plugin_achievements_secrets: yes
           plugin_achievements_limit: 10
 
           filename: assets/github-metrics.svg
+
+      - name: Write Job Summary
+        if: always()
+        run: |
+          echo "## Metrics Generation" >> $GITHUB_STEP_SUMMARY
+          echo "- **Status**: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Output**: assets/github-metrics.svg" >> $GITHUB_STEP_SUMMARY
