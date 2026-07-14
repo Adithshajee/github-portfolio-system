@@ -1,5 +1,5 @@
 """
-GPS — GitHub Portfolio System v2
+GPS — GitHub Portfolio System v3
 Developer Identity Platform
 
 A production-grade platform for automating, standardizing, and scaling

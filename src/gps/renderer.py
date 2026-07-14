@@ -152,7 +152,7 @@ class HTMLRenderer:
 
     def render(self, markdown_content: str, title: str = "Developer Profile") -> str:
         """Convert markdown to basic HTML (placeholder implementation)."""
-        logger.warning("HTML renderer is a stub. Full implementation coming in GPS v2.1.")
+        logger.warning("HTML renderer is a stub. Full implementation coming in GPS v3.1.0.")
         escaped = markdown_content.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
         return (
             f"<!DOCTYPE html>\n<html>\n<head><title>{title}</title></head>\n"
