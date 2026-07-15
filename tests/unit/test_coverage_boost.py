@@ -448,3 +448,114 @@ class TestEngineCoreExtra:
         result = engine.validate()
         # Missing markers logs a warning but validate() still returns True
         assert result is True
+
+    def test_widgets_all_lifecycle(self) -> None:
+        """Test render, preview, metadata, settings, and registration across all 19 widgets."""
+        from gps.widgets.registry import WidgetRegistry
+        registry = WidgetRegistry()
+        all_widgets = registry.list_all()
+        assert len(all_widgets) == 19
+
+        data = {
+            "username": "testuser",
+            "blog": {
+                "posts": [{"title": "Post 1", "link": "https://p1", "published": "2026-07-15"}]
+            },
+            "repos": [{"name": "repo1", "html_url": "https://github.com/r1", "description": "desc"}]
+        }
+
+        for w_name in all_widgets:
+            widget = registry.get(w_name)
+            assert widget is not None
+            assert widget.name == w_name
+            # Verify basic methods don't crash
+            preview_res = widget.preview()
+            assert isinstance(preview_res, str)
+            meta = widget.metadata()
+            assert isinstance(meta, dict)
+            assert meta["name"] == w_name
+            to_dict_res = widget.to_dict()
+            assert to_dict_res["name"] == w_name
+            assert widget.settings() == widget._settings
+
+            # Verify render
+            rendered = widget.render(data)
+            assert isinstance(rendered, str)
+
+            # Test register method
+            mock_reg = MagicMock()
+            widget.register(mock_reg)
+            mock_reg.register.assert_called_once()
+
+    def test_render_sections_method(self) -> None:
+        """Test MarkdownRenderer.render_sections assemblies."""
+        from gps.renderer.core import MarkdownRenderer
+        renderer = MarkdownRenderer(Path("README.md"))
+        mock_theme = MagicMock()
+        mock_theme.render_template.side_effect = lambda t, c: f"[{t}]"
+        res = renderer.render_sections(["hero", "skills"], mock_theme, {})
+        assert res == "[hero.md]\n\n[skills.md]"
+
+    def test_ai_scoring_heuristics(self) -> None:
+        """Test Project Health, README Quality, and Developer Identity scores."""
+        from gps.ai.agents import CareerAgent, ProfileOptimizerAgent, ProjectRankingAgent
+        from gps.config.manager import GPSSettings
+
+        # 1. Identity Score
+        career = CareerAgent()
+        settings = GPSSettings(username="testuser")
+        settings.providers.huggingface.enabled = True
+        settings.providers.leetcode.enabled = True
+        rep = career.compute_developer_identity_score(settings)
+        assert rep["score"] > 50
+        assert "strengths" in rep
+
+        # 2. README Quality Score
+        optimizer = ProfileOptimizerAgent()
+        readme_rep = optimizer.compute_readme_score("# Title\n[![shields](https://img.shields.io/badge/A-B-blue)](#)\n```python\nprint(1)\n```\ninstallation:\npip install gps")
+        assert readme_rep["score"] > 60
+        assert readme_rep["badges_rating"] == "Excellent"
+
+        # 3. Repo Health Analyzer
+        ranker = ProjectRankingAgent()
+        repo = {
+            "name": "My-Awesome-OS",
+            "description": "Custom modular microkernel in Assembly",
+            "stargazers_count": 450,
+            "fork": False,
+            "has_wiki": True,
+            "topics": ["assembly", "os"]
+        }
+        health = ranker.analyze_repo_health(repo)
+        assert health["score"] == 100
+        assert "improvements" in health
+
+    def test_api_ai_health_endpoint(self) -> None:
+        """Test backend FastAPI /api/ai/health endpoint."""
+        from fastapi.testclient import TestClient
+        from gps.dashboard.backend.server import app
+        client = TestClient(app)
+        
+        settings_payload = {
+            "username": "testuser",
+            "readme_path": "profile/README.md",
+            "timezone": "UTC",
+            "theme": {"name": "swe_general", "variant": "dark"},
+            "providers": {
+                "github": {"enabled": True, "repo_count": 5},
+                "huggingface": {"enabled": False},
+                "kaggle": {"enabled": False},
+                "leetcode": {"enabled": False},
+                "blog": {"enabled": False},
+            },
+            "sections": {
+                "order": ["hero", "skills", "active_repos", "contact"]
+            }
+        }
+        
+        response = client.post("/api/ai/health", json=settings_payload)
+        assert response.status_code == 200
+        data = response.json()
+        assert "identity" in data
+        assert "readme" in data
+        assert "repository" in data
