@@ -47,7 +47,7 @@ class TestCLIDoctor:
 
             result = runner.invoke(main, ["doctor"])
             assert result.exit_code == 0
-            assert "All critical system health checks passed" in result.output
+            assert "README markers: Present & valid" in result.output
 
             # Cleanup env variable
             del os.environ["GH_PAT"]
@@ -135,6 +135,13 @@ class TestCLIErrorHandling:
     def test_export_html_unsupported(self, tmp_path: Path) -> None:
         runner = CliRunner()
         with runner.isolated_filesystem(temp_dir=tmp_path):
+            config = Path("gps.yml")
+            config.write_text(
+                "platform:\n  username: 'test'\n  readme_path: 'profile/README.md'\n",
+                encoding="utf-8"
+            )
+            Path("profile").mkdir()
+            Path("profile/README.md").write_text("", encoding="utf-8")
             result = runner.invoke(main, ["export", "--format", "html"])
             assert result.exit_code == 1
             assert "HTML export is not yet fully implemented" in result.output
