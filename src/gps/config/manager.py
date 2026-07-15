@@ -29,6 +29,7 @@ warnings.filterwarnings(
 
 class HTTPSettings(BaseModel):
     """HTTP client tuning parameters."""
+
     timeout: int = Field(default=15, ge=1, le=120)
     max_retries: int = Field(default=3, ge=0, le=10)
     retry_delay: float = Field(default=1.0, ge=0.1)
@@ -37,6 +38,7 @@ class HTTPSettings(BaseModel):
 
 class GitHubProviderSettings(BaseModel):
     """GitHub provider configuration."""
+
     enabled: bool = True
     repo_count: int = Field(default=5, ge=1, le=100)
     include_pinned: bool = True
@@ -47,6 +49,7 @@ class GitHubProviderSettings(BaseModel):
 
 class HuggingFaceProviderSettings(BaseModel):
     """Hugging Face provider configuration."""
+
     enabled: bool = False
     username: str = ""
     model_count: int = Field(default=5, ge=1, le=50)
@@ -55,29 +58,34 @@ class HuggingFaceProviderSettings(BaseModel):
 
 class KaggleProviderSettings(BaseModel):
     """Kaggle provider configuration."""
+
     enabled: bool = False
     username: str = ""
 
 
 class LinkedInProviderSettings(BaseModel):
     """LinkedIn provider configuration (manual updates only)."""
+
     enabled: bool = False
 
 
 class LeetCodeProviderSettings(BaseModel):
     """LeetCode provider configuration."""
+
     enabled: bool = False
     username: str = ""
 
 
 class BlogProviderSettings(BaseModel):
     """Blog provider configuration."""
+
     enabled: bool = False
     feed_url: str = ""
 
 
 class ProvidersSettings(BaseModel):
     """Aggregated provider settings."""
+
     github: GitHubProviderSettings = Field(default_factory=GitHubProviderSettings)
     huggingface: HuggingFaceProviderSettings = Field(default_factory=HuggingFaceProviderSettings)
     kaggle: KaggleProviderSettings = Field(default_factory=KaggleProviderSettings)
@@ -88,6 +96,7 @@ class ProvidersSettings(BaseModel):
 
 class OutputSettings(BaseModel):
     """Output format settings."""
+
     markdown: bool = True
     json: bool = False  # type: ignore[assignment]
     html: bool = False
@@ -95,17 +104,20 @@ class OutputSettings(BaseModel):
 
 class SectionConfig(BaseModel):
     """Individual section toggle."""
+
     enabled: bool = True
 
 
 class ActiveReposSectionConfig(SectionConfig):
     """Active repos section with marker configuration."""
+
     start_marker: str = "<!-- REPOS_START -->"
     end_marker: str = "<!-- REPOS_END -->"
 
 
 class SectionsSettings(BaseModel):
     """README section configuration."""
+
     order: list[str] = Field(
         default_factory=lambda: [
             "hero",
@@ -132,18 +144,21 @@ class SectionsSettings(BaseModel):
 
 class ThemeSettings(BaseModel):
     """Theme configuration settings."""
+
     name: str = "swe_general"
     variant: str = "dark"
 
 
 class LoggingSettings(BaseModel):
     """Logging configuration."""
+
     level: str = Field(default="INFO", pattern="^(DEBUG|INFO|WARNING|ERROR|CRITICAL)$")
     json_format: bool = False
 
 
 class GPSSettings(BaseSettings):
     """Root platform configuration model."""
+
     model_config = SettingsConfigDict(
         env_prefix="GPS_",
         env_nested_delimiter="__",
@@ -161,8 +176,6 @@ class GPSSettings(BaseSettings):
         file_secret_settings: PydanticBaseSettingsSource,
     ) -> tuple[PydanticBaseSettingsSource, ...]:
         return env_settings, init_settings
-
-
 
     # Platform identity
     username: str = Field(default="")

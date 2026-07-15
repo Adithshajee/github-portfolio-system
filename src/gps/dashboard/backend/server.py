@@ -78,7 +78,7 @@ def get_config() -> dict[str, Any]:
             },
             "sections": {
                 "order": ["hero", "professional_overview", "skills", "active_repos", "contact"]
-            }
+            },
         }
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Failed to load config: {e}") from e
@@ -106,6 +106,7 @@ def get_preview(settings_dict: dict[str, Any]) -> dict[str, str]:
         from datetime import datetime
 
         from gps.providers.github.models import GitHubRepo
+
         mock_repos = [
             GitHubRepo(
                 name="AI-Driven-Tool-Tracking",
@@ -141,7 +142,7 @@ def generate_profile(settings_dict: dict[str, Any]) -> dict[str, Any]:
         return {
             "status": "success",
             "updated_sections": list(results.keys()),
-            "message": f"Successfully generated profile. Updated {len(results)} sections."
+            "message": f"Successfully generated profile. Updated {len(results)} sections.",
         }
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Generation failed: {e}") from e
@@ -213,6 +214,7 @@ def optimize_profile(req: AIAskRequest) -> dict[str, Any]:
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e)) from e
 
+
 @app.post("/api/ai/health")
 def get_ai_health(settings_dict: dict[str, Any]) -> dict[str, Any]:
     """Calculate and return Repository Health, README Quality, and Developer Identity scores."""
@@ -221,6 +223,7 @@ def get_ai_health(settings_dict: dict[str, Any]) -> dict[str, Any]:
 
         # 1. Compute Developer Identity Score
         from gps.ai.agents import CareerAgent, ProfileOptimizerAgent, ProjectRankingAgent
+
         career = CareerAgent()
         identity_report = career.compute_developer_identity_score(settings)
 
@@ -229,6 +232,7 @@ def get_ai_health(settings_dict: dict[str, Any]) -> dict[str, Any]:
         from datetime import datetime
 
         from gps.providers.github.models import GitHubRepo
+
         mock_repos = [
             GitHubRepo(
                 name="AetherOS",
@@ -258,7 +262,7 @@ def get_ai_health(settings_dict: dict[str, Any]) -> dict[str, Any]:
             "forks_count": 18,
             "fork": False,
             "has_wiki": True,
-            "topics": ["rust", "os", "kernel"]
+            "topics": ["rust", "os", "kernel"],
         }
         repo_health = ranker.analyze_repo_health(repo_data)
 

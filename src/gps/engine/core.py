@@ -24,8 +24,10 @@ class GPSEngine:
     def __init__(self, settings: GPSSettings) -> None:
         self.settings = settings
         from gps.plugins.loader import discover_plugins
+
         discover_plugins(self)
         from gps.themes.engine import ThemeEngine
+
         theme_name = getattr(self.settings.theme, "name", "swe_general")
         theme_variant = getattr(self.settings.theme, "variant", "dark")
         self.theme_engine = ThemeEngine(theme_name=theme_name, variant=theme_variant)
@@ -66,6 +68,7 @@ class GPSEngine:
             else:
                 try:
                     from gps.providers.huggingface.provider import HuggingFaceProvider
+
                     providers.append(
                         HuggingFaceProvider(
                             username=hf_username,
@@ -86,6 +89,7 @@ class GPSEngine:
             else:
                 try:
                     from gps.providers.kaggle.provider import KaggleProvider
+
                     providers.append(
                         KaggleProvider(
                             username=kaggle_username,
@@ -100,6 +104,7 @@ class GPSEngine:
             if leetcode_username:
                 try:
                     from gps.providers.leetcode import LeetCodeProvider
+
                     providers.append(LeetCodeProvider(username=leetcode_username))
                 except Exception as e:
                     logger.error("Failed to load LeetCode provider: %s", e)
@@ -109,6 +114,7 @@ class GPSEngine:
             if feed_url:
                 try:
                     from gps.providers.blog import BlogProvider
+
                     providers.append(BlogProvider(feed_url=feed_url))
                 except Exception as e:
                     logger.error("Failed to load Blog provider: %s", e)
@@ -181,6 +187,7 @@ class GPSEngine:
             validate_github_username,
             validate_readme_markers,
         )
+
         ok = True
         cfg = self.settings
 

@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import logging
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
@@ -24,18 +23,20 @@ class TestEngineCore:
         # Prevent Kaggle authentication checks during unit tests
         monkeypatch.setenv("KAGGLE_USERNAME", "kuser")
         monkeypatch.setenv("KAGGLE_KEY", "kkey")
-        
-        settings = GPSSettings.model_validate({
-            "username": "testuser",
-            "providers": {
-                "github": {"enabled": True},
-                "huggingface": {"enabled": True},
-                "kaggle": {"enabled": True},
-                "leetcode": {"enabled": True},
-                "blog": {"enabled": True, "feed_url": "https://test.com/rss"},
+
+        settings = GPSSettings.model_validate(
+            {
+                "username": "testuser",
+                "providers": {
+                    "github": {"enabled": True},
+                    "huggingface": {"enabled": True},
+                    "kaggle": {"enabled": True},
+                    "leetcode": {"enabled": True},
+                    "blog": {"enabled": True, "feed_url": "https://test.com/rss"},
+                },
             }
-        })
-        
+        )
+
         with patch("gps.providers.kaggle.provider.KaggleProvider") as mock_kaggle:
             mock_kaggle.return_value = MagicMock()
             engine = GPSEngine(settings)
@@ -52,11 +53,11 @@ class TestEngineCore:
     def test_engine_run_dry_run(self) -> None:
         settings = GPSSettings(username="testuser")
         engine = GPSEngine(settings)
-        
+
         mock_provider = MagicMock()
         mock_provider.name = "github"
         mock_provider.run.return_value = ("rendered_content", True)
-        
+
         with patch.object(engine, "_build_providers", return_value=[mock_provider]):
             with patch.object(engine, "_inject_readme") as mock_inject:
                 res = engine.run(dry_run=True)
@@ -66,11 +67,11 @@ class TestEngineCore:
     def test_engine_run_parallel(self) -> None:
         settings = GPSSettings(username="testuser")
         engine = GPSEngine(settings)
-        
+
         prov_a = MagicMock()
         prov_a.name = "github"
         prov_a.run.return_value = ("github_res", True)
-        
+
         prov_b = MagicMock()
         prov_b.name = "leetcode"
         prov_b.run.return_value = ("leetcode_res", True)
@@ -86,7 +87,7 @@ class TestEngineCore:
         monkeypatch.chdir(tmp_path)
         settings = GPSSettings(username="testuser", readme_path=Path("profile/README.md"))
         engine = GPSEngine(settings)
-        
+
         # Missing README file
         assert engine.validate() is False
 
@@ -94,5 +95,5 @@ class TestEngineCore:
         readme = tmp_path / "profile/README.md"
         readme.parent.mkdir()
         readme.write_text("<!-- REPOS_START -->\n<!-- REPOS_END -->", encoding="utf-8")
-        
+
         assert engine.validate() is True

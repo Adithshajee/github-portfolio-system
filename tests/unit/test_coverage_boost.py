@@ -3,20 +3,22 @@
 from __future__ import annotations
 
 import logging
-import sys
 from pathlib import Path
 from unittest.mock import MagicMock, patch
+
+from typing import Any
 
 import pytest
 from click.testing import CliRunner
 
-
 # ─── Logging ───────────────────────────────────────────────────────────────────
+
 
 @pytest.mark.unit
 class TestGPSLogging:
     def test_configure_logging_default(self) -> None:
         from gps.utils.logging import configure_logging
+
         configure_logging()
         root = logging.getLogger("gps")
         assert root.level == logging.INFO
@@ -24,12 +26,14 @@ class TestGPSLogging:
 
     def test_configure_logging_debug(self) -> None:
         from gps.utils.logging import configure_logging
+
         configure_logging(level="DEBUG")
         root = logging.getLogger("gps")
         assert root.level == logging.DEBUG
 
     def test_configure_logging_json_format(self) -> None:
         from gps.utils.logging import configure_logging
+
         configure_logging(json_format=True)
         root = logging.getLogger("gps")
         assert root.handlers
@@ -37,6 +41,7 @@ class TestGPSLogging:
 
     def test_configure_logging_json_with_exception(self) -> None:
         from gps.utils.logging import configure_logging
+
         configure_logging(json_format=True)
         root = logging.getLogger("gps")
         try:
@@ -46,11 +51,24 @@ class TestGPSLogging:
 
     def test_gps_formatter_all_levels(self) -> None:
         from gps.utils.logging import _GPSFormatter
+
         fmt = _GPSFormatter()
-        for level in (logging.DEBUG, logging.INFO, logging.WARNING, logging.ERROR, logging.CRITICAL):
+        levels = (
+            logging.DEBUG,
+            logging.INFO,
+            logging.WARNING,
+            logging.ERROR,
+            logging.CRITICAL,
+        )
+        for level in levels:
             record = logging.LogRecord(
-                name="gps.test", level=level, pathname="", lineno=0,
-                msg="test", args=(), exc_info=None
+                name="gps.test",
+                level=level,
+                pathname="",
+                lineno=0,
+                msg="test",
+                args=(),
+                exc_info=None,
             )
             result = fmt.format(record)
             assert "test" in result
@@ -58,14 +76,20 @@ class TestGPSLogging:
 
 # ─── Provider Base Registry ────────────────────────────────────────────────────
 
+
 @pytest.mark.unit
 class TestProviderRegistry:
     def test_register_and_get_provider(self) -> None:
-        from gps.providers.base import _REGISTRY, get_provider, list_providers, register
+        from gps.providers.base import _REGISTRY, BaseProvider, get_provider, list_providers, register
 
-        @register("_test_provider_")  # type: ignore[arg-type]
-        class _TestProvider:  # type: ignore[no-untyped-def]
+        @register("_test_provider_")
+        class _TestProvider(BaseProvider[dict[str, Any], dict[str, Any]]):
             name = "_test_provider_"
+            display_name = "Test"
+            def fetch(self) -> dict[str, Any]: return {}
+            def transform(self, raw: dict[str, Any]) -> dict[str, Any]: return raw
+            def validate(self, data: dict[str, Any]) -> bool: return True
+            def render(self, data: dict[str, Any]) -> str: return ""
 
         assert "_test_provider_" in list_providers()
         cls = get_provider("_test_provider_")
@@ -75,26 +99,27 @@ class TestProviderRegistry:
 
     def test_get_unknown_provider_raises(self) -> None:
         from gps.providers.base import get_provider
+
         with pytest.raises(KeyError, match="Unknown provider"):
             get_provider("__nonexistent__")
 
     def test_base_provider_run_validation_fail(self) -> None:
         from gps.providers.base import BaseProvider
 
-        class _FakeProvider(BaseProvider):  # type: ignore[type-arg]
+        class _FakeProvider(BaseProvider[dict[str, Any], dict[str, Any]]):
             name = "fake"
             display_name = "Fake"
 
-            def fetch(self) -> dict:  # type: ignore[override]
+            def fetch(self) -> dict[str, Any]:
                 return {}
 
-            def transform(self, raw: dict) -> dict:  # type: ignore[override]
+            def transform(self, raw: dict[str, Any]) -> dict[str, Any]:
                 return raw
 
-            def validate(self, data: dict) -> bool:  # type: ignore[override]
+            def validate(self, data: dict[str, Any]) -> bool:
                 return False
 
-            def render(self, data: dict) -> str:  # type: ignore[override]
+            def render(self, data: dict[str, Any]) -> str:
                 return ""
 
         provider = _FakeProvider()
@@ -105,20 +130,20 @@ class TestProviderRegistry:
     def test_base_provider_run_exception(self) -> None:
         from gps.providers.base import BaseProvider
 
-        class _ErrorProvider(BaseProvider):  # type: ignore[type-arg]
+        class _ErrorProvider(BaseProvider[dict[str, Any], dict[str, Any]]):
             name = "error"
             display_name = "Error"
 
-            def fetch(self) -> dict:  # type: ignore[override]
+            def fetch(self) -> dict[str, Any]:
                 raise RuntimeError("fetch failed")
 
-            def transform(self, raw: dict) -> dict:  # type: ignore[override]
+            def transform(self, raw: dict[str, Any]) -> dict[str, Any]:
                 return raw
 
-            def validate(self, data: dict) -> bool:  # type: ignore[override]
+            def validate(self, data: dict[str, Any]) -> bool:
                 return True
 
-            def render(self, data: dict) -> str:  # type: ignore[override]
+            def render(self, data: dict[str, Any]) -> str:
                 return ""
 
         provider = _ErrorProvider()
@@ -129,20 +154,20 @@ class TestProviderRegistry:
     def test_base_provider_run_with_theme(self) -> None:
         from gps.providers.base import BaseProvider
 
-        class _ThemeProvider(BaseProvider):  # type: ignore[type-arg]
+        class _ThemeProvider(BaseProvider[dict[str, Any], dict[str, Any]]):
             name = "themed"
             display_name = "Themed"
 
-            def fetch(self) -> dict:  # type: ignore[override]
+            def fetch(self) -> dict[str, Any]:
                 return {"key": "value"}
 
-            def transform(self, raw: dict) -> dict:  # type: ignore[override]
+            def transform(self, raw: dict[str, Any]) -> dict[str, Any]:
                 return raw
 
-            def validate(self, data: dict) -> bool:  # type: ignore[override]
+            def validate(self, data: dict[str, Any]) -> bool:
                 return True
 
-            def render(self, data: dict) -> str:  # type: ignore[override]
+            def render(self, data: dict[str, Any]) -> str:
                 return "base_rendered"
 
         mock_theme_engine = MagicMock()
@@ -157,10 +182,12 @@ class TestProviderRegistry:
 
 # ─── Discovery Engine ──────────────────────────────────────────────────────────
 
+
 @pytest.mark.unit
 class TestDiscoveryExtra:
     def test_auto_detect_hf_found(self) -> None:
         from gps.utils.discovery import DiscoveryEngine
+
         mock_response = MagicMock()
         mock_response.status_code = 200
         mock_client = MagicMock()
@@ -171,6 +198,7 @@ class TestDiscoveryExtra:
 
     def test_auto_detect_hf_not_found(self) -> None:
         from gps.utils.discovery import DiscoveryEngine
+
         mock_response = MagicMock()
         mock_response.status_code = 404
         mock_client = MagicMock()
@@ -181,6 +209,7 @@ class TestDiscoveryExtra:
 
     def test_auto_detect_exception_is_handled(self) -> None:
         from gps.utils.discovery import DiscoveryEngine
+
         mock_client = MagicMock()
         mock_client.get.side_effect = Exception("Network error")
         engine = DiscoveryEngine(http_client=mock_client)
@@ -191,11 +220,13 @@ class TestDiscoveryExtra:
 
 # ─── CLI Exception Branches ────────────────────────────────────────────────────
 
+
 @pytest.mark.unit
 class TestCLIExceptionBranches:
     def test_run_unexpected_exception(self) -> None:
         runner = CliRunner()
         from gps.cli import main
+
         with patch("gps.cli._load_engine", side_effect=RuntimeError("boom")):
             result = runner.invoke(main, ["run"])
             assert result.exit_code == 1
@@ -203,6 +234,7 @@ class TestCLIExceptionBranches:
     def test_run_verbose_unexpected_exception(self) -> None:
         runner = CliRunner()
         from gps.cli import main
+
         with patch("gps.cli._load_engine", side_effect=RuntimeError("boom")):
             result = runner.invoke(main, ["run", "--verbose"])
             assert result.exit_code == 1
@@ -210,6 +242,7 @@ class TestCLIExceptionBranches:
     def test_validate_unexpected_exception(self) -> None:
         runner = CliRunner()
         from gps.cli import main
+
         with patch("gps.cli._load_engine", side_effect=RuntimeError("unexpected")):
             result = runner.invoke(main, ["validate"])
             assert result.exit_code == 1
@@ -218,6 +251,7 @@ class TestCLIExceptionBranches:
         cfg = tmp_path / "gps.yml"
         cfg.write_text("username: testuser\n", encoding="utf-8")
         from gps.cli import _load_engine
+
         # configure_logging is a local import inside _load_engine; patch at its source
         with patch("gps.utils.logging.configure_logging"):
             engine = _load_engine(str(cfg), verbose=False)
@@ -227,6 +261,7 @@ class TestCLIExceptionBranches:
         cfg = tmp_path / "gps.yml"
         cfg.write_text("username: testuser\n", encoding="utf-8")
         from gps.cli import _load_engine
+
         # configure_logging is a local import inside _load_engine; patch at its source
         with patch("gps.utils.logging.configure_logging") as mock_log:
             _load_engine(str(cfg), verbose=True)
@@ -235,11 +270,13 @@ class TestCLIExceptionBranches:
 
 # ─── Engine Core Additional Branches ──────────────────────────────────────────
 
+
 @pytest.mark.unit
 class TestEngineCoreExtra:
     def test_engine_run_provider_returns_empty(self) -> None:
         from gps.config.manager import GPSSettings
         from gps.engine.core import GPSEngine
+
         settings = GPSSettings(username="testuser")
         engine = GPSEngine(settings)
 
@@ -253,7 +290,9 @@ class TestEngineCoreExtra:
                 assert res == {}
                 mock_inject.assert_not_called()
 
-    def test_engine_inject_readme_calls_renderer(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    def test_engine_inject_readme_calls_renderer(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
         monkeypatch.chdir(tmp_path)
         readme = tmp_path / "profile" / "README.md"
         readme.parent.mkdir()
@@ -261,19 +300,21 @@ class TestEngineCoreExtra:
 
         from gps.config.manager import GPSSettings
         from gps.engine.core import GPSEngine
+
         settings = GPSSettings(username="testuser", readme_path=Path("profile/README.md"))
         engine = GPSEngine(settings)
 
-        with patch("gps.engine.core.MarkdownRenderer") as MockRenderer:
+        with patch("gps.engine.core.MarkdownRenderer") as mock_renderer:
             mock_instance = MagicMock()
-            MockRenderer.return_value = mock_instance
+            mock_renderer.return_value = mock_instance
             engine._inject_readme("content", dry_run=True)
-            MockRenderer.assert_called_once()
+            mock_renderer.assert_called_once()
             mock_instance.inject.assert_called_once()
 
     def test_engine_provider_filter_single(self) -> None:
         from gps.config.manager import GPSSettings
         from gps.engine.core import GPSEngine
+
         settings = GPSSettings(username="testuser")
         engine = GPSEngine(settings)
 
@@ -297,6 +338,7 @@ class TestEngineCoreExtra:
         """Line 40: GitHub enabled but username is empty → logs error, skips."""
         from gps.config.manager import GPSSettings
         from gps.engine.core import GPSEngine
+
         settings = GPSSettings(username="")
         settings.providers.github.enabled = True
         engine = GPSEngine(settings)
@@ -307,6 +349,7 @@ class TestEngineCoreExtra:
         """Lines 74-75: HuggingFace import fails → logs error, continues."""
         from gps.config.manager import GPSSettings
         from gps.engine.core import GPSEngine
+
         settings = GPSSettings(username="testuser")
         settings.providers.huggingface.enabled = True
         engine = GPSEngine(settings)
@@ -326,6 +369,7 @@ class TestEngineCoreExtra:
         """Lines 90-91: Kaggle provider construction fails → logs error, continues."""
         from gps.config.manager import GPSSettings
         from gps.engine.core import GPSEngine
+
         settings = GPSSettings(username="testuser")
         settings.providers.kaggle.enabled = True
         engine = GPSEngine(settings)
@@ -340,6 +384,7 @@ class TestEngineCoreExtra:
         """Lines 99-100: LeetCode provider construction fails → logs error, continues."""
         from gps.config.manager import GPSSettings
         from gps.engine.core import GPSEngine
+
         settings = GPSSettings(username="testuser")
         settings.providers.leetcode.enabled = True
         engine = GPSEngine(settings)
@@ -354,13 +399,16 @@ class TestEngineCoreExtra:
         """Lines 108-109: Blog provider construction fails → logs error, continues."""
         from gps.config.manager import GPSSettings
         from gps.engine.core import GPSEngine
-        settings = GPSSettings.model_validate({
-            "username": "testuser",
-            "providers": {
-                "github": {"enabled": False},
-                "blog": {"enabled": True, "feed_url": "https://example.com/rss"},
+
+        settings = GPSSettings.model_validate(
+            {
+                "username": "testuser",
+                "providers": {
+                    "github": {"enabled": False},
+                    "blog": {"enabled": True, "feed_url": "https://example.com/rss"},
+                },
             }
-        })
+        )
         engine = GPSEngine(settings)
         with patch(
             "gps.providers.blog.BlogProvider",
@@ -373,6 +421,7 @@ class TestEngineCoreExtra:
         """Lines 141-142: Future raises in ThreadPoolExecutor → logged, not re-raised."""
         from gps.config.manager import GPSSettings
         from gps.engine.core import GPSEngine
+
         settings = GPSSettings(username="testuser")
         engine = GPSEngine(settings)
 
@@ -394,8 +443,9 @@ class TestEngineCoreExtra:
         """Lines 152-153: outputs.json=True triggers _export_json."""
         from gps.config.manager import GPSSettings
         from gps.engine.core import GPSEngine
+
         settings = GPSSettings(username="testuser")
-        settings.outputs.json = True  # type: ignore[attr-defined]
+        settings.outputs.json = True
         engine = GPSEngine(settings)
 
         mock_provider = MagicMock()
@@ -405,7 +455,7 @@ class TestEngineCoreExtra:
         with patch.object(engine, "_build_providers", return_value=[mock_provider]):
             with patch.object(engine, "_inject_readme"):
                 with patch.object(engine, "_export_json") as mock_export:
-                    res = engine.run()
+                    engine.run()
                     mock_export.assert_called_once()
 
     def test_export_json(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -415,26 +465,30 @@ class TestEngineCoreExtra:
 
         from gps.config.manager import GPSSettings
         from gps.engine.core import GPSEngine
+
         settings = GPSSettings(username="testuser", readme_path=Path("profile/README.md"))
         engine = GPSEngine(settings)
 
-        with patch("gps.engine.core.JSONRenderer") as MockJSON:
+        with patch("gps.engine.core.JSONRenderer") as mock_json_class:
             mock_json = MagicMock()
-            MockJSON.return_value = mock_json
+            mock_json_class.return_value = mock_json
             engine._export_json({"github": "content"}, dry_run=True)
-            MockJSON.assert_called_once()
+            mock_json_class.assert_called_once()
             mock_json.render.assert_called_once()
 
     def test_validate_invalid_username(self) -> None:
         """Lines 185-187: username fails validate_github_username check."""
         from gps.config.manager import GPSSettings
         from gps.engine.core import GPSEngine
+
         settings = GPSSettings(username="INVALID USER NAME!!!")
         engine = GPSEngine(settings)
         result = engine.validate()
         assert result is False
 
-    def test_validate_readme_missing_markers(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    def test_validate_readme_missing_markers(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
         """Lines 200-203: README exists but markers are absent → warning, returns True."""
         monkeypatch.chdir(tmp_path)
         readme = tmp_path / "profile" / "README.md"
@@ -443,6 +497,7 @@ class TestEngineCoreExtra:
 
         from gps.config.manager import GPSSettings
         from gps.engine.core import GPSEngine
+
         settings = GPSSettings(username="testuser", readme_path=Path("profile/README.md"))
         engine = GPSEngine(settings)
         result = engine.validate()
@@ -452,6 +507,7 @@ class TestEngineCoreExtra:
     def test_widgets_all_lifecycle(self) -> None:
         """Test render, preview, metadata, settings, and registration across all 19 widgets."""
         from gps.widgets.registry import WidgetRegistry
+
         registry = WidgetRegistry()
         all_widgets = registry.list_all()
         assert len(all_widgets) == 19
@@ -461,7 +517,9 @@ class TestEngineCoreExtra:
             "blog": {
                 "posts": [{"title": "Post 1", "link": "https://p1", "published": "2026-07-15"}]
             },
-            "repos": [{"name": "repo1", "html_url": "https://github.com/r1", "description": "desc"}]
+            "repos": [
+                {"name": "repo1", "html_url": "https://github.com/r1", "description": "desc"}
+            ],
         }
 
         for w_name in all_widgets:
@@ -490,6 +548,7 @@ class TestEngineCoreExtra:
     def test_render_sections_method(self) -> None:
         """Test MarkdownRenderer.render_sections assemblies."""
         from gps.renderer.core import MarkdownRenderer
+
         renderer = MarkdownRenderer(Path("README.md"))
         mock_theme = MagicMock()
         mock_theme.render_template.side_effect = lambda t, c: f"[{t}]"
@@ -512,7 +571,9 @@ class TestEngineCoreExtra:
 
         # 2. README Quality Score
         optimizer = ProfileOptimizerAgent()
-        readme_rep = optimizer.compute_readme_score("# Title\n[![shields](https://img.shields.io/badge/A-B-blue)](#)\n```python\nprint(1)\n```\ninstallation:\npip install gps")
+        readme_rep = optimizer.compute_readme_score(
+            "# Title\n[![shields](https://img.shields.io/badge/A-B-blue)](#)\n```python\nprint(1)\n```\ninstallation:\npip install gps"
+        )  # noqa: E501
         assert readme_rep["score"] > 60
         assert readme_rep["badges_rating"] == "Excellent"
 
@@ -524,7 +585,7 @@ class TestEngineCoreExtra:
             "stargazers_count": 450,
             "fork": False,
             "has_wiki": True,
-            "topics": ["assembly", "os"]
+            "topics": ["assembly", "os"],
         }
         health = ranker.analyze_repo_health(repo)
         assert health["score"] == 100
@@ -533,9 +594,11 @@ class TestEngineCoreExtra:
     def test_api_ai_health_endpoint(self) -> None:
         """Test backend FastAPI /api/ai/health endpoint."""
         from fastapi.testclient import TestClient
+
         from gps.dashboard.backend.server import app
+
         client = TestClient(app)
-        
+
         settings_payload = {
             "username": "testuser",
             "readme_path": "profile/README.md",
@@ -548,11 +611,9 @@ class TestEngineCoreExtra:
                 "leetcode": {"enabled": False},
                 "blog": {"enabled": False},
             },
-            "sections": {
-                "order": ["hero", "skills", "active_repos", "contact"]
-            }
+            "sections": {"order": ["hero", "skills", "active_repos", "contact"]},
         }
-        
+
         response = client.post("/api/ai/health", json=settings_payload)
         assert response.status_code == 200
         data = response.json()

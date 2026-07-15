@@ -61,6 +61,7 @@ class BaseWidget:
 
 # ─── Built-in Widget Implementations ──────────────────────────────────────────
 
+
 class GitHubStatsWidget(BaseWidget):
     name = "github_stats"
 
@@ -68,10 +69,10 @@ class GitHubStatsWidget(BaseWidget):
         username = data.get("username", "Adithshajee")
         accent = self._settings.get("accent_color", "2563eb").replace("#", "")
         return (
-            f"<p align=\"center\">\n"
-            f"  <img src=\"https://github-readme-stats.vercel.app/api?username={username}"
-            f"&show_icons=true&theme=dark&title_color={accent}&icon_color={accent}\" "
-            f"alt=\"GitHub Stats\" />\n"
+            f'<p align="center">\n'
+            f'  <img src="https://github-readme-stats.vercel.app/api?username={username}'
+            f'&show_icons=true&theme=dark&title_color={accent}&icon_color={accent}" '
+            f'alt="GitHub Stats" />\n'
             f"</p>"
         )
 
@@ -86,13 +87,13 @@ class SnakeWidget(BaseWidget):
         username = data.get("username", "Adithshajee")
         return (
             f"<picture>\n"
-            f"  <source media=\"(prefers-color-scheme: dark)\" "
-            f"srcset=\"https://raw.githubusercontent.com/{username}/{username}/main/assets/github-contribution-grid-snake-dark.svg\">\n"
-            f"  <source media=\"(prefers-color-scheme: light)\" "
-            f"srcset=\"https://raw.githubusercontent.com/{username}/{username}/main/assets/github-contribution-grid-snake.svg\">\n"
-            f"  <img alt=\"Snake eating contributions\" "
-            f"src=\"https://raw.githubusercontent.com/{username}/{username}/main/assets/github-contribution-grid-snake.svg\" "  # noqa: E501
-            f"width=\"100%\">\n"
+            f'  <source media="(prefers-color-scheme: dark)" '
+            f'srcset="https://raw.githubusercontent.com/{username}/{username}/main/assets/github-contribution-grid-snake-dark.svg">\n'
+            f'  <source media="(prefers-color-scheme: light)" '
+            f'srcset="https://raw.githubusercontent.com/{username}/{username}/main/assets/github-contribution-grid-snake.svg">\n'
+            f'  <img alt="Snake eating contributions" '
+            f'src="https://raw.githubusercontent.com/{username}/{username}/main/assets/github-contribution-grid-snake.svg" '  # noqa: E501
+            f'width="100%">\n'
             f"</picture>"
         )
 
@@ -139,9 +140,11 @@ class TechStackWidget(BaseWidget):
 
     def render(self, data: dict[str, Any]) -> str:
         skills = self._settings.get("skills", ["Python", "FastAPI", "Docker"])
-        lines = ["### 🛠️ Technology Stack", "", "<p align=\"center\">"]
+        lines = ["### 🛠️ Technology Stack", "", '<p align="center">']
         for skill in skills:
-            lines.append(f"  <img src=\"https://img.shields.io/badge/{skill}-1E293B?style=flat-square\" alt=\"{skill}\" />")  # noqa: E501
+            lines.append(
+                f'  <img src="https://img.shields.io/badge/{skill}-1E293B?style=flat-square" alt="{skill}" />'
+            )  # noqa: E501
         lines.append("</p>")
         return "\n".join(lines)
 
@@ -155,9 +158,9 @@ class VisitorsWidget(BaseWidget):
     def render(self, data: dict[str, Any]) -> str:
         username = data.get("username", "Adithshajee")
         return (
-            f"<p align=\"center\">\n"
-            f"  <img src=\"https://komarev.com/ghpvc/?username={username}&label=Visitor+Views&color=2563eb&style=flat-square\" "  # noqa: E501
-            f"alt=\"Visitor Counter\" />\n"
+            f'<p align="center">\n'
+            f'  <img src="https://komarev.com/ghpvc/?username={username}&label=Visitor+Views&color=2563eb&style=flat-square" '  # noqa: E501
+            f'alt="Visitor Counter" />\n'
             f"</p>"
         )
 
@@ -171,9 +174,9 @@ class ContributionGraphWidget(BaseWidget):
     def render(self, data: dict[str, Any]) -> str:
         username = data.get("username", "Adithshajee")
         return (
-            f"<p align=\"center\">\n"
-            f"  <img src=\"https://github-readme-activity-graph.vercel.app/graph?username={username}&bg_color=0f172a&color=2563eb\" "  # noqa: E501
-            f"alt=\"Contribution Graph\" />\n"
+            f'<p align="center">\n'
+            f'  <img src="https://github-readme-activity-graph.vercel.app/graph?username={username}&bg_color=0f172a&color=2563eb" '  # noqa: E501
+            f'alt="Contribution Graph" />\n'
             f"</p>"
         )
 
@@ -187,9 +190,9 @@ class MetricsWidget(BaseWidget):
     def render(self, data: dict[str, Any]) -> str:
         username = data.get("username", "Adithshajee")
         return (
-            f"<p align=\"center\">\n"
-            f"  <img src=\"https://metrics.lecoq.io/{username}?template=classic&config.timezone=UTC\" "  # noqa: E501
-            f"alt=\"GitHub Metrics\" />\n"
+            f'<p align="center">\n'
+            f'  <img src="https://metrics.lecoq.io/{username}?template=classic&config.timezone=UTC" '  # noqa: E501
+            f'alt="GitHub Metrics" />\n'
             f"</p>"
         )
 
@@ -203,9 +206,9 @@ class LanguagesWidget(BaseWidget):
     def render(self, data: dict[str, Any]) -> str:
         username = data.get("username", "Adithshajee")
         return (
-            f"<p align=\"center\">\n"
-            f"  <img src=\"https://github-readme-stats.vercel.app/api/top-langs/?username={username}&layout=compact&theme=dark\" "  # noqa: E501
-            f"alt=\"Top Languages\" />\n"
+            f'<p align="center">\n'
+            f'  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username={username}&layout=compact&theme=dark" '  # noqa: E501
+            f'alt="Top Languages" />\n'
             f"</p>"
         )
 
@@ -234,7 +237,9 @@ class TimelineWidget(BaseWidget):
     name = "timeline"
 
     def render(self, data: dict[str, Any]) -> str:
-        events = self._settings.get("events", ["2024: Started GPS development", "2026: Released GPS v3.0.0"])  # noqa: E501
+        events = self._settings.get(
+            "events", ["2024: Started GPS development", "2026: Released GPS v3.0.0"]
+        )  # noqa: E501
         lines = ["### ⏳ Activity Timeline", ""]
         for event in events:
             lines.append(f"- *{event}*")
@@ -250,9 +255,9 @@ class SponsorsWidget(BaseWidget):
     def render(self, data: dict[str, Any]) -> str:
         username = data.get("username", "Adithshajee")
         return (
-            f"<p align=\"center\">\n"
-            f"  <a href=\"https://github.com/sponsors/{username}\">\n"
-            f"    <img src=\"https://img.shields.io/badge/Sponsor-{username}-pink?style=for-the-badge&logo=GitHub-Sponsors\" alt=\"Sponsor\" />\n"  # noqa: E501
+            f'<p align="center">\n'
+            f'  <a href="https://github.com/sponsors/{username}">\n'
+            f'    <img src="https://img.shields.io/badge/Sponsor-{username}-pink?style=for-the-badge&logo=GitHub-Sponsors" alt="Sponsor" />\n'  # noqa: E501
             f"  </a>\n"
             f"</p>"
         )
@@ -267,8 +272,8 @@ class AchievementsWidget(BaseWidget):
     def render(self, data: dict[str, Any]) -> str:
         username = data.get("username", "Adithshajee")
         return (
-            f"<p align=\"center\">\n"
-            f"  <img src=\"https://github-profile-trophy.vercel.app/?username={username}&theme=onedark\" alt=\"Achievements Trohpy\" />\n"  # noqa: E501
+            f'<p align="center">\n'
+            f'  <img src="https://github-profile-trophy.vercel.app/?username={username}&theme=onedark" alt="Achievements Trohpy" />\n'  # noqa: E501
             f"</p>"
         )
 
@@ -292,10 +297,14 @@ class SocialLinksWidget(BaseWidget):
     name = "social_links"
 
     def render(self, data: dict[str, Any]) -> str:
-        links = self._settings.get("links", {"LinkedIn": "https://linkedin.com", "Twitter": "https://twitter.com"})
-        lines = ["### 🤝 Connect with me", "", "<p align=\"left\">"]
+        links = self._settings.get(
+            "links", {"LinkedIn": "https://linkedin.com", "Twitter": "https://twitter.com"}
+        )
+        lines = ["### 🤝 Connect with me", "", '<p align="left">']
         for platform, url in links.items():
-            lines.append(f"  <a href=\"{url}\" target=\"_blank\"><img src=\"https://img.shields.io/badge/{platform}-0077B5?style=flat-square\" alt=\"{platform}\" /></a>")  # noqa: E501
+            lines.append(
+                f'  <a href="{url}" target="_blank"><img src="https://img.shields.io/badge/{platform}-0077B5?style=flat-square" alt="{platform}" /></a>'
+            )  # noqa: E501
         lines.append("</p>")
         return "\n".join(lines)
 
@@ -309,10 +318,10 @@ class QuoteWidget(BaseWidget):
     def render(self, data: dict[str, Any]) -> str:
         quote = self._settings.get("quote", "Talk is cheap. Show me the code.")
         author = self._settings.get("author", "Linus Torvalds")
-        return f"> \"{quote}\"\n>\n> — *{author}*"
+        return f'> "{quote}"\n>\n> — *{author}*'
 
     def preview(self) -> str:
-        return "> \"Talk is cheap. Show me the code.\"\n> — Linus Torvalds"
+        return '> "Talk is cheap. Show me the code."\n> — Linus Torvalds'
 
 
 class ActivityGraphWidget(BaseWidget):
@@ -321,8 +330,8 @@ class ActivityGraphWidget(BaseWidget):
     def render(self, data: dict[str, Any]) -> str:
         username = data.get("username", "Adithshajee")
         return (
-            f"<p align=\"center\">\n"
-            f"  <img src=\"https://github-readme-activity-graph.vercel.app/graph?username={username}&theme=github-dark\" alt=\"Activity Graph\" />\n"  # noqa: E501
+            f'<p align="center">\n'
+            f'  <img src="https://github-readme-activity-graph.vercel.app/graph?username={username}&theme=github-dark" alt="Activity Graph" />\n'  # noqa: E501
             f"</p>"
         )
 
@@ -336,8 +345,8 @@ class GitHubStreakWidget(BaseWidget):
     def render(self, data: dict[str, Any]) -> str:
         username = data.get("username", "Adithshajee")
         return (
-            f"<p align=\"center\">\n"
-            f"  <img src=\"https://github-readme-streak-stats.herokuapp.com/?user={username}&theme=dark\" alt=\"GitHub Streak\" />\n"  # noqa: E501
+            f'<p align="center">\n'
+            f'  <img src="https://github-readme-streak-stats.herokuapp.com/?user={username}&theme=dark" alt="GitHub Streak" />\n'  # noqa: E501
             f"</p>"
         )
 
@@ -349,7 +358,9 @@ class CustomMarkdownWidget(BaseWidget):
     name = "custom_markdown"
 
     def render(self, data: dict[str, Any]) -> str:
-        markdown = self._settings.get("markdown", "### 🚀 Custom Section\nWrite whatever you want here!")  # noqa: E501
+        markdown = self._settings.get(
+            "markdown", "### 🚀 Custom Section\nWrite whatever you want here!"
+        )  # noqa: E501
         return str(markdown)
 
     def preview(self) -> str:
@@ -357,6 +368,7 @@ class CustomMarkdownWidget(BaseWidget):
 
 
 # ─── Widget Registry Catalog Manager ──────────────────────────────────────────
+
 
 class WidgetRegistry:
     """Registry catalogs and instantiates themes/widgets configurations."""

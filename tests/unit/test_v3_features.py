@@ -127,6 +127,7 @@ class TestThemeEngine:
 
     def test_theme_engine_render_built_in(self) -> None:
         engine = ThemeEngine(theme_name="swe_general")
+
         class MockData:
             repos = [  # noqa: RUF012
                 MagicMock(
@@ -138,6 +139,7 @@ class TestThemeEngine:
                     updated_date="2026-07-14",
                 )
             ]
+
         rendered = engine.render_template("github.md", {"data": MockData()})
         assert "Active Projects" in rendered
         assert "repo1" in rendered
@@ -199,6 +201,7 @@ class TestPluginLoaderAndEngine:
         monkeypatch.chdir(tmp_path)
 
         from gps.plugins.loader import discover_plugins
+
         mock_engine = MagicMock()
         discover_plugins(mock_engine)
 
@@ -207,16 +210,18 @@ class TestPluginLoaderAndEngine:
         from gps.config import GPSSettings
         from gps.engine import GPSEngine
 
-        settings = GPSSettings.model_validate({
-            "username": "testuser",
-            "providers": {
-                "github": {"enabled": True},
-                "huggingface": {"enabled": True, "username": "hfuser"},
-                "kaggle": {"enabled": True, "username": "kaggleuser"},
-                "leetcode": {"enabled": True, "username": "lcuser"},
-                "blog": {"enabled": True, "feed_url": "https://test.com/feed"},
-            },
-        })
+        settings = GPSSettings.model_validate(
+            {
+                "username": "testuser",
+                "providers": {
+                    "github": {"enabled": True},
+                    "huggingface": {"enabled": True, "username": "hfuser"},
+                    "kaggle": {"enabled": True, "username": "kaggleuser"},
+                    "leetcode": {"enabled": True, "username": "lcuser"},
+                    "blog": {"enabled": True, "feed_url": "https://test.com/feed"},
+                },
+            }
+        )
         engine = GPSEngine(settings)
         providers = engine._build_providers()
         assert len(providers) == 5

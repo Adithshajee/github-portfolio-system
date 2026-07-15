@@ -2,14 +2,11 @@
 
 from __future__ import annotations
 
-import json
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 import pytest
 from click.testing import CliRunner
-
-from gps.verify.core import VerificationEngine
 
 from gps.ai.agents import (
     CareerAgent,
@@ -22,6 +19,7 @@ from gps.ai.agents import (
 )
 from gps.storage.manager import StorageManager
 from gps.utils.discovery import DiscoveryEngine
+from gps.verify.core import VerificationEngine
 from gps.widgets.registry import WidgetRegistry
 
 
@@ -95,7 +93,11 @@ class TestWidgetsRegistry:
 
         blog = registry.get("blog")
         assert blog is not None
-        data = {"blog": {"posts": [{"title": "Post 1", "link": "https://link", "published": "2026-07-15"}]}}
+        data = {
+            "blog": {
+                "posts": [{"title": "Post 1", "link": "https://link", "published": "2026-07-15"}]
+            }
+        }
         assert "Post 1" in blog.render(data)
         assert "✍️" in blog.preview()
 
@@ -121,7 +123,7 @@ class TestAIAgents:
         agent = PortfolioAgent()
         repos = [
             {"language": "Python", "topics": ["pytorch", "yolo"]},
-            {"language": "Go", "topics": ["docker", "kubernetes"]}
+            {"language": "Go", "topics": ["docker", "kubernetes"]},
         ]
         res = agent.analyze(repos)
         assert "AI" in res["role"] or "DevOps" in res["role"]
@@ -145,7 +147,13 @@ class TestAIAgents:
         repos = [
             {"name": "repo-a", "stargazers_count": 5, "forks_count": 1, "description": "Good"},
             {"name": "repo-b", "stargazers_count": 50, "forks_count": 5, "description": "Great"},
-            {"name": "repo-c", "stargazers_count": 1, "forks_count": 0, "description": None, "fork": True}
+            {
+                "name": "repo-c",
+                "stargazers_count": 1,
+                "forks_count": 0,
+                "description": None,
+                "fork": True,
+            },
         ]
         ranked = agent.rank_repos(repos)
         assert ranked[0]["name"] == "repo-b"
@@ -179,13 +187,12 @@ class TestVerificationEngine:
         engine = VerificationEngine(workspace_root=tmp_path)
         config = tmp_path / "gps.yml"
         config.write_text(
-            "platform:\n  username: 'test'\n  readme_path: 'profile/README.md'\n",
-            encoding="utf-8"
+            "platform:\n  username: 'test'\n  readme_path: 'profile/README.md'\n", encoding="utf-8"
         )
         readme = tmp_path / "profile/README.md"
         readme.parent.mkdir()
         readme.write_text("<!-- REPOS_START -->\n<!-- REPOS_END -->", encoding="utf-8")
-        
+
         res = engine.run_doctor(config)
         assert res["config_found"] is True
         assert res["config_valid"] is True
@@ -196,13 +203,12 @@ class TestVerificationEngine:
         engine = VerificationEngine(workspace_root=tmp_path)
         config = tmp_path / "gps.yml"
         config.write_text(
-            "platform:\n  username: 'test'\n  readme_path: 'profile/README.md'\n",
-            encoding="utf-8"
+            "platform:\n  username: 'test'\n  readme_path: 'profile/README.md'\n", encoding="utf-8"
         )
         readme = tmp_path / "profile/README.md"
         readme.parent.mkdir()
         readme.write_text("<!-- REPOS_START -->\n<!-- REPOS_END -->", encoding="utf-8")
-        
+
         res = engine.verify_all(config)
         assert res["status"] in ("PASSED", "WARNING")
 
@@ -215,14 +221,14 @@ class TestVerificationEngine:
         engine = VerificationEngine()
         with patch("shutil.which", return_value="/usr/bin/git"):
             assert engine._check_git_available() is True
-        
+
         with patch("shutil.which", return_value=None):
             assert engine._check_git_available() is False
 
         with patch("httpx.Client.get") as mock_get:
             mock_get.return_value = MagicMock(status_code=200)
             assert engine._check_internet_connectivity() is True
-            
+
             mock_get.side_effect = Exception()
             assert engine._check_internet_connectivity() is False
 
@@ -236,8 +242,7 @@ class TestVerificationEngine:
         engine = VerificationEngine(workspace_root=tmp_path)
         config = tmp_path / "gps.yml"
         config.write_text(
-            "platform:\n  username: 'test'\n  readme_path: 'profile/README.md'\n",
-            encoding="utf-8"
+            "platform:\n  username: 'test'\n  readme_path: 'profile/README.md'\n", encoding="utf-8"
         )
         res = engine.run_doctor(config)
         assert res["readme_found"] is False
@@ -247,13 +252,12 @@ class TestVerificationEngine:
         engine = VerificationEngine(workspace_root=tmp_path)
         config = tmp_path / "gps.yml"
         config.write_text(
-            "platform:\n  username: 'test'\n  readme_path: 'profile/README.md'\n",
-            encoding="utf-8"
+            "platform:\n  username: 'test'\n  readme_path: 'profile/README.md'\n", encoding="utf-8"
         )
         readme = tmp_path / "profile/README.md"
         readme.parent.mkdir()
         readme.write_text("No markers here", encoding="utf-8")
-        
+
         res = engine.run_doctor(config)
         assert res["markers_valid"] is False
         assert any("markers are missing" in e for e in res["errors"])
@@ -267,13 +271,14 @@ class TestCLICommands:
             config = Path("gps.yml")
             config.write_text(
                 "platform:\n  username: 'test'\n  readme_path: 'profile/README.md'\n",
-                encoding="utf-8"
+                encoding="utf-8",
             )
             readme = Path("profile/README.md")
             readme.parent.mkdir()
             readme.write_text("<!-- REPOS_START -->\n<!-- REPOS_END -->", encoding="utf-8")
-            
+
             from gps.cli import main
+
             result = runner.invoke(main, ["verify"])
             assert result.exit_code == 0
             assert "VERIFICATION SUCCESSFUL" in result.output
@@ -282,6 +287,7 @@ class TestCLICommands:
         runner = CliRunner()
         with runner.isolated_filesystem(temp_dir=tmp_path):
             from gps.cli import main
+
             result = runner.invoke(main, ["verify"])
             assert result.exit_code == 1
             assert "VERIFICATION FAILED" in result.output
@@ -290,6 +296,7 @@ class TestCLICommands:
         runner = CliRunner()
         with patch("gps.dashboard.backend.server.launch_dashboard") as mock_launch:
             from gps.cli import main
+
             result = runner.invoke(main, ["dashboard"])
             assert result.exit_code == 0
             mock_launch.assert_called_once()
@@ -297,7 +304,7 @@ class TestCLICommands:
     def test_cli_plugins(self) -> None:
         runner = CliRunner()
         from gps.cli import main
-        
+
         res = runner.invoke(main, ["plugin", "list"])
         assert res.exit_code == 0
         assert "No custom plugins" in res.output
@@ -395,12 +402,17 @@ class TestKaggleClientExtra:
     def test_kaggle_client_import_error(self) -> None:
         """KaggleClient must raise ImportError when the kaggle package is absent."""
         import sys
+
         # Temporarily hide the kaggle package from imports inside the client module
-        with patch.dict(sys.modules, {"kaggle": None, "kaggle.api": None,
-                                       "kaggle.api.kaggle_api_extended": None}):
+        with patch.dict(
+            sys.modules,
+            {"kaggle": None, "kaggle.api": None, "kaggle.api.kaggle_api_extended": None},
+        ):
             # Re-import so that the mocked sys.modules takes effect
             import importlib
+
             import gps.providers.kaggle.client as kc_mod
+
             importlib.reload(kc_mod)
             with pytest.raises(ImportError):
                 kc_mod.KaggleClient()
@@ -440,16 +452,22 @@ class TestKaggleClientExtra:
         mock_kaggle_module.KaggleApiExtended = mock_api_class
 
         import sys
+
         fake_module = MagicMock()
         fake_module.KaggleApiExtended = mock_api_class
 
-        with patch.dict(sys.modules, {
-            "kaggle": MagicMock(),
-            "kaggle.api": MagicMock(),
-            "kaggle.api.kaggle_api_extended": fake_module,
-        }):
+        with patch.dict(
+            sys.modules,
+            {
+                "kaggle": MagicMock(),
+                "kaggle.api": MagicMock(),
+                "kaggle.api.kaggle_api_extended": fake_module,
+            },
+        ):
             import importlib
+
             import gps.providers.kaggle.client as kc_mod
+
             importlib.reload(kc_mod)
 
             client = kc_mod.KaggleClient(username="kuser", key="kkey")

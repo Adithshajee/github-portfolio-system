@@ -38,6 +38,7 @@ class LeetCodeProvider(BaseProvider[dict[str, Any], LeetCodeData]):
 
     def fetch(self) -> dict[str, Any]:
         from typing import cast
+
         url = f"https://leetcode-stats-api.herokuapp.com/{self.username}"
         try:
             return cast(dict[str, Any], self._http.get(url))

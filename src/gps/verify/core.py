@@ -34,7 +34,7 @@ class VerificationEngine:
             "config_valid": False,
             "readme_found": False,
             "markers_valid": False,
-            "token_detected": False,
+            "token_detected": False,  # nosec B105
             "workflows_found": False,
             "errors": [],
             "warnings": [],
@@ -60,14 +60,18 @@ class VerificationEngine:
                     else:
                         results["errors"].append("README markers are missing or misconfigured.")
                 else:
-                    results["errors"].append(f"Profile README missing at path: {settings.readme_path}")  # noqa: E501
+                    results["errors"].append(
+                        f"Profile README missing at path: {settings.readme_path}"
+                    )  # noqa: E501
 
                 # Check tokens
                 gh_token = os.environ.get("GH_PAT") or os.environ.get("GITHUB_TOKEN")
                 if gh_token:
                     results["token_detected"] = True
                 else:
-                    results["warnings"].append("GitHub token (GH_PAT) is missing. Rate limits will be constrained.")  # noqa: E501
+                    results["warnings"].append(
+                        "GitHub token (GH_PAT) is missing. Rate limits will be constrained."
+                    )  # noqa: E501
 
             except Exception as e:
                 results["errors"].append(f"Config validation error: {e}")
@@ -102,11 +106,13 @@ class VerificationEngine:
     def _check_git_available(self) -> bool:
         """Verify git client is installed and accessible in shell path."""
         import shutil
+
         return shutil.which("git") is not None
 
     def _check_internet_connectivity(self) -> bool:
         """Check network ping to GitHub APIs to verify connectivity."""
         import httpx
+
         try:
             with httpx.Client(timeout=2.0) as client:
                 res = client.get("https://api.github.com", follow_redirects=True)

@@ -124,12 +124,13 @@ class ProjectRankingAgent:
             "documentation": "9/10" if score > 80 else "6/10",
             "tests": "8/10" if score > 75 else "5/10",
             "ci": "10/10" if score > 80 else "5/10",
-            "improvements": improvements or [
+            "improvements": improvements
+            or [
                 "Add Architecture Diagram",
                 "Add Benchmark Section",
                 "Add Contributing Guide",
-                "Add Roadmap"
-            ]
+                "Add Roadmap",
+            ],
         }
 
 
@@ -200,10 +201,11 @@ class CareerAgent:
             "score": score,
             "strengths": strengths or ["Consistent commits", "Flagship project configured"],
             "weaknesses": weaknesses or ["Sparse secondary descriptions"],
-            "recommendations": recommendations or [
+            "recommendations": recommendations
+            or [
                 "Add a portfolio website",
                 "Enable discussion tab",
-            ]
+            ],
         }
 
 
@@ -221,7 +223,9 @@ class ProfileOptimizerAgent:
     """Analyzes profile elements, identifies skill gaps, and recommends updates."""
 
     def analyze_gaps(self, current_skills: list[str], detected_techs: list[str]) -> list[str]:
-        missing = [t for t in detected_techs if t.lower() not in [s.lower() for s in current_skills]]  # noqa: E501
+        missing = [
+            t for t in detected_techs if t.lower() not in [s.lower() for s in current_skills]
+        ]  # noqa: E501
         return missing
 
     def compute_readme_score(self, content: str) -> dict[str, Any]:
@@ -242,5 +246,5 @@ class ProfileOptimizerAgent:
             "badges_rating": "Excellent" if "img.shields.io" in content else "Missing",
             "installation_rating": "Detailed" if "install" in content.lower() else "Basic",
             "examples_rating": "Rich" if "```" in content else "None",
-            "recruiter_friendliness": f"{score - 5}%"
+            "recruiter_friendliness": f"{score - 5}%",
         }

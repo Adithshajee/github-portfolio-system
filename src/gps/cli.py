@@ -54,6 +54,7 @@ def print_diagnostic_error(problem: str, why: str, fix: str, next_cmd: str) -> N
 def _load_engine(config: str | None, verbose: bool) -> GPSEngine:
     """Load configuration and create engine instance."""
     from gps.utils.logging import configure_logging
+
     settings = load_config(Path(config) if config else None)
     configure_logging(
         level="DEBUG" if verbose else settings.logging.level,
@@ -126,6 +127,7 @@ def cmd_run(
         )
         if verbose:
             import traceback
+
             traceback.print_exc()
         sys.exit(1)
 
@@ -163,6 +165,7 @@ def cmd_status(config: str | None) -> None:
     """Show provider status, rate limits, and configuration summary."""
     try:
         from gps.utils.logging import configure_logging
+
         settings = load_config(Path(config) if config else None)
         configure_logging(settings.logging.level, settings.logging.json_format)
 
@@ -338,9 +341,13 @@ def cmd_init(
             if click.confirm("Do you want to enable Blog RSS provider?", default=False):
                 while True:
                     blog_url = click.prompt("Blog RSS Feed URL", type=str)
-                    if blog_url.strip() and (blog_url.startswith("http://") or blog_url.startswith("https://")):
+                    if blog_url.strip() and (
+                        blog_url.startswith("http://") or blog_url.startswith("https://")
+                    ):
                         break
-                    console.print("[red]Invalid Feed URL (must start with http:// or https://).[/red]")
+                    console.print(
+                        "[red]Invalid Feed URL (must start with http:// or https://).[/red]"
+                    )
 
     if not username:
         console.print("[red]Error: GitHub username is required to initialize GPS.[/red]")
@@ -359,9 +366,7 @@ def cmd_init(
     readme = Path("profile/README.md")
     if not readme.exists():
         readme.write_text(
-            f"# {username}\n\n"
-            "<!-- REPOS_START -->\n"
-            "<!-- REPOS_END -->\n",
+            f"# {username}\n\n<!-- REPOS_START -->\n<!-- REPOS_END -->\n",
             encoding="utf-8",
         )
     else:
@@ -485,7 +490,9 @@ def cmd_doctor(config: str | None) -> None:
 
     # Output logs
     if doctor_res["python_ok"]:
-        console.print("[green]✓[/green] Python version is suitable: " + doctor_res["python_version"])  # noqa: E501
+        console.print(
+            "[green]✓[/green] Python version is suitable: " + doctor_res["python_version"]
+        )  # noqa: E501
     else:
         console.print("[red]✗[/red] Python version is outdated.")
 
@@ -524,6 +531,7 @@ def cmd_dashboard(port: int) -> None:
     """Launch the interactive web dashboard identity studio."""
     try:
         from gps.dashboard.backend.server import launch_dashboard
+
         launch_dashboard(port=port)
     except Exception as e:
         print_diagnostic_error(
@@ -539,7 +547,9 @@ def cmd_dashboard(port: int) -> None:
 @click.option("--config", default=None, metavar="PATH", help="Path to gps.yml config file.")
 def cmd_verify(config: str | None) -> None:
     """Run full verification diagnostic pipeline and display status report."""
-    console.print(Panel("[bold cyan]GPS Platform Verification Subsystem[/bold cyan]", border_style="cyan"))  # noqa: E501
+    console.print(
+        Panel("[bold cyan]GPS Platform Verification Subsystem[/bold cyan]", border_style="cyan")
+    )  # noqa: E501
     cfg_path = Path(config) if config else Path("gps.yml")
 
     verify_res = VerificationEngine().verify_all(cfg_path)
@@ -550,18 +560,34 @@ def cmd_verify(config: str | None) -> None:
     table.add_column("Status", justify="center")
 
     doctor_info = verify_res["doctor"]
-    table.add_row("Python Environment", "[green]OK[/green]" if doctor_info["python_ok"] else "[red]FAIL[/red]")  # noqa: E501
-    table.add_row("Internet APIs Ping", "[green]OK[/green]" if doctor_info["internet_ok"] else "[red]FAIL[/red]")  # noqa: E501
-    table.add_row("Configuration syntax", "[green]OK[/green]" if doctor_info["config_valid"] else "[red]FAIL[/red]")  # noqa: E501
-    table.add_row("README Markers check", "[green]OK[/green]" if doctor_info["markers_valid"] else "[red]FAIL[/red]")  # noqa: E501
-    table.add_row("Auth Token detection", "[green]DETECTED[/green]" if doctor_info["token_detected"] else "[yellow]MISSING[/yellow]")  # noqa: E501
+    table.add_row(
+        "Python Environment", "[green]OK[/green]" if doctor_info["python_ok"] else "[red]FAIL[/red]"
+    )  # noqa: E501
+    table.add_row(
+        "Internet APIs Ping",
+        "[green]OK[/green]" if doctor_info["internet_ok"] else "[red]FAIL[/red]",
+    )  # noqa: E501
+    table.add_row(
+        "Configuration syntax",
+        "[green]OK[/green]" if doctor_info["config_valid"] else "[red]FAIL[/red]",
+    )  # noqa: E501
+    table.add_row(
+        "README Markers check",
+        "[green]OK[/green]" if doctor_info["markers_valid"] else "[red]FAIL[/red]",
+    )  # noqa: E501
+    table.add_row(
+        "Auth Token detection",
+        "[green]DETECTED[/green]" if doctor_info["token_detected"] else "[yellow]MISSING[/yellow]",
+    )  # noqa: E501
 
     console.print(table)
     if verify_res["status"] in ("PASSED", "WARNING"):
         console.print("\n[green]✅ VERIFICATION SUCCESSFUL — Ready for deployment[/green]")
         sys.exit(0)
     else:
-        console.print("\n[red]❌ VERIFICATION FAILED — Resolves check failures before pushing[/red]")  # noqa: E501
+        console.print(
+            "\n[red]❌ VERIFICATION FAILED — Resolves check failures before pushing[/red]"
+        )  # noqa: E501
         sys.exit(1)
 
 

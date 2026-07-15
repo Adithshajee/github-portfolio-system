@@ -39,7 +39,7 @@ class TestCLIDoctor:
                 "providers:\n"
                 "  github:\n"
                 "    enabled: true\n",
-                encoding="utf-8"
+                encoding="utf-8",
             )
 
             # Setup environment variable
@@ -98,7 +98,7 @@ class TestCLIErrorHandling:
             problem="Mock problem description",
             why="Mock explanation for error",
             fix="Steps to resolve",
-            next_cmd="gps doctor"
+            next_cmd="gps doctor",
         )
 
     def test_run_file_not_found_handling(self, tmp_path: Path) -> None:
@@ -138,7 +138,7 @@ class TestCLIErrorHandling:
             config = Path("gps.yml")
             config.write_text(
                 "platform:\n  username: 'test'\n  readme_path: 'profile/README.md'\n",
-                encoding="utf-8"
+                encoding="utf-8",
             )
             Path("profile").mkdir()
             Path("profile/README.md").write_text("", encoding="utf-8")
