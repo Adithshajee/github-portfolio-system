@@ -270,12 +270,73 @@ def cmd_export(fmt: str, config: str | None, verbose: bool) -> None:
         sys.exit(1)
 
 
+def _detect_github_username() -> str | None:
+    import shutil
+    import subprocess
+
+    git_bin = shutil.which("git") or "git"
+
+    # 1. Try github config
+    try:
+        res = subprocess.run(  # noqa: S603
+            [git_bin, "config", "github.user"],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        if res.returncode == 0 and res.stdout.strip():
+            return res.stdout.strip()
+    except Exception:  # noqa: S110
+        pass
+
+    # 2. Try user.name
+    try:
+        res = subprocess.run(  # noqa: S603
+            [git_bin, "config", "user.name"],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        if res.returncode == 0 and res.stdout.strip():
+            candidate = res.stdout.strip()
+            if re.match(r"^[a-zA-Z0-9\-]+$", candidate) and len(candidate) <= 39:
+                return candidate
+    except Exception:  # noqa: S110
+        pass
+
+    return None
+
+
+def _detect_git_repository() -> bool:
+    try:
+        search = Path.cwd()
+        for directory in [search, *search.parents]:
+            if (directory / ".git").exists():
+                return True
+            if directory == directory.parent:
+                break
+    except Exception:  # noqa: S110
+        pass
+    return False
+
+
+def _verify_internet_connectivity() -> bool:
+    import httpx
+
+    try:
+        with httpx.Client(timeout=2.0) as client:
+            res = client.get("https://api.github.com", follow_redirects=True)
+            return res.status_code == 200
+    except Exception:
+        return False
+
+
 @main.command("init")
 @click.option("--username", "-u", help="GitHub username.")
 @click.option(
     "--theme",
     "-t",
-    type=click.Choice(["swe_general", "ai_ml", "devops"]),
+    type=click.Choice(["swe_general", "ai_ml", "devops", "apple", "cyberpunk"]),
     default="swe_general",
     help="Portfolio theme design.",
 )
@@ -298,16 +359,56 @@ def cmd_init(
     """Initialize a new GPS configuration file and workspace."""
     from gps.utils.validators import validate_github_username
 
+    console.print(
+        Panel(
+            "[bold cyan]GPS Setup Wizard & Auto-Detection[/bold cyan]\n"
+            "Initializing Developer Identity Workspace...",
+            border_style="cyan",
+        )
+    )
+
+    # Auto-detection metrics
+    detected_user = _detect_github_username()
+    has_git = _detect_git_repository()
+    has_internet = _verify_internet_connectivity()
+    python_ver = sys.version.split(" ")[0]
+
+    # Display detected environment context
+    env_table = Table(title="Detected Environment Details", show_header=False, border_style="dim")
+    env_table.add_row("Python version", f"[green]{python_ver}[/green]")
+    env_table.add_row(
+        "Git Repository Root",
+        "[green]✓ Found[/green]" if has_git else "[yellow]⚠ Not found[/yellow]",
+    )
+    env_table.add_row(
+        "Internet Connection",
+        "[green]✓ Connected[/green]" if has_internet else "[red]✗ Disconnected[/red]",
+    )
+    if detected_user:
+        env_table.add_row("Detected GitHub Username", f"[cyan]{detected_user}[/cyan]")
+    console.print(env_table)
+
     if not non_interactive:
         # Prompt & validate GitHub username
         if not username:
+            default_user = detected_user or ""
             while True:
-                username = click.prompt("GitHub Username", type=str)
+                prompt_text = "GitHub Username"
+                if default_user:
+                    prompt_text += f" [default: {default_user}]"
+                username = click.prompt(prompt_text, default=default_user, type=str)
                 if validate_github_username(username):
                     break
                 console.print(
                     "[red]Invalid GitHub username format (1-39 alphanumeric/hyphens).[/red]"
                 )
+
+        # Prompt theme
+        theme = click.prompt(
+            "Portfolio Theme Design",
+            type=click.Choice(["swe_general", "ai_ml", "devops", "apple", "cyberpunk"]),
+            default=theme,
+        )
 
         # Prompt & validate HF username
         if not hf_user:
@@ -348,6 +449,10 @@ def cmd_init(
                     console.print(
                         "[red]Invalid Feed URL (must start with http:// or https://).[/red]"
                     )
+    else:
+        # If non-interactive and no username provided, use detected or abort
+        if not username:
+            username = detected_user
 
     if not username:
         console.print("[red]Error: GitHub username is required to initialize GPS.[/red]")
@@ -832,11 +937,118 @@ def cmd_config_show() -> None:
         sys.exit(1)
 
 
+@click.group("auth")
+def auth_group() -> None:
+    """Manage GitHub OAuth credentials."""
+    pass
+
+
+@auth_group.command("login")
+def cmd_auth_login() -> None:
+    """Start the interactive GitHub Device Flow login process."""
+    from gps.auth.device_flow import initiate_device_flow, poll_for_token
+    from gps.auth.storage import save_secure_token
+
+    console.print(
+        Panel(
+            "[bold cyan]GitHub OAuth Device Authorization[/bold cyan]\nStarting flow...",
+            border_style="cyan",
+        )
+    )
+
+    try:
+        flow_data = initiate_device_flow()
+        user_code = flow_data["user_code"]
+        verification_uri = flow_data["verification_uri"]
+        device_code = flow_data["device_code"]
+        interval = flow_data.get("interval", 5)
+
+        console.print(
+            f"\n1. Open your browser and go to: [bold underline]{verification_uri}[/bold underline]"
+        )
+        console.print(f"2. Enter the authorization code: [bold green]{user_code}[/bold green]\n")
+
+        # Attempt to open browser automatically
+        import webbrowser
+
+        try:
+            webbrowser.open(verification_uri)
+        except Exception:  # noqa: S110
+            pass
+
+        console.print("[dim]Waiting for authorization...[/dim]")
+        token = poll_for_token(device_code, interval)
+        save_secure_token(token)
+
+        console.print("\n[bold green]✓ Successfully authenticated with GitHub![/bold green]")
+        console.print("[dim]OAuth token stored securely in local credentials storage.[/dim]")
+
+    except Exception as e:
+        console.print(f"\n[red]❌ Authentication failed: {e}[/red]")
+        sys.exit(1)
+
+
+@auth_group.command("status")
+def cmd_auth_status() -> None:
+    """Check the current login credentials status."""
+    from gps.auth.storage import get_secure_token
+
+    token = get_secure_token()
+
+    if not token:
+        console.print(
+            "[yellow]Not logged in.[/yellow] Run 'gps auth login' to connect your GitHub profile."
+        )
+        sys.exit(0)
+
+    # Validate token scopes and username
+    import httpx
+
+    headers = {
+        "Authorization": f"token {token}",
+        "Accept": "application/vnd.github.v3+json",
+        "User-Agent": "GPS-CLI",
+    }
+
+    try:
+        res = httpx.get("https://api.github.com/user", headers=headers, timeout=10)
+        if res.status_code == 200:
+            user_data = res.json()
+            username = user_data.get("login", "unknown")
+            scopes = res.headers.get("X-OAuth-Scopes", "none")
+            console.print(
+                Panel(
+                    f"[bold green]✓ Authenticated with GitHub[/bold green]\n\n"
+                    f"User: [cyan]{username}[/cyan]\n"
+                    f"Active Scopes: [dim]{scopes}[/dim]",
+                    title="GPS Authentication Status",
+                    border_style="green",
+                )
+            )
+        else:
+            console.print(
+                "[red]❌ Authentication token is invalid or expired.[/red] Run 'gps auth login' to re-authenticate."  # noqa: E501
+            )
+    except Exception as e:
+        console.print(f"[red]❌ Failed to verify authentication status: {e}[/red]")
+        sys.exit(1)
+
+
+@auth_group.command("logout")
+def cmd_auth_logout() -> None:
+    """Clear local authentication credentials."""
+    from gps.auth.storage import clear_secure_token
+
+    clear_secure_token()
+    console.print("[green]✓ Successfully logged out. Secure credentials cleared.[/green]")
+
+
 main.add_command(plugin_group)
 main.add_command(theme_group)
 main.add_command(widget_group)
 main.add_command(provider_group)
 main.add_command(config_group)
+main.add_command(auth_group)
 
 if __name__ == "__main__":
     main()

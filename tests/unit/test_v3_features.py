@@ -181,8 +181,9 @@ class TestCLIInit:
             result = runner.invoke(
                 main,
                 ["init"],
-                input="testuser\ny\nhfuser\nn\ny\nleetcodeuser\nn\n",
+                input="testuser\nswe_general\ny\nhfuser\nn\ny\nleetcodeuser\nn\n",
             )
+
             assert result.exit_code == 0
             assert "GPS configuration successfully initialized" in result.output
             assert Path("gps.yml").exists()

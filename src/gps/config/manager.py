@@ -213,6 +213,12 @@ class GPSSettings(BaseSettings):
     @model_validator(mode="after")
     def validate_enabled_providers(self) -> GPSSettings:
         """Warn if HF/Kaggle are enabled but no credentials provided."""
+        # Load local secure token if github_token is not explicitly set
+        if not self.github_token:
+            from gps.auth.storage import get_secure_token
+
+            self.github_token = get_secure_token() or ""
+
         if self.providers.huggingface.enabled and not self.hf_token:
             warnings.warn(
                 "Hugging Face provider is enabled but HF_TOKEN is not set.",

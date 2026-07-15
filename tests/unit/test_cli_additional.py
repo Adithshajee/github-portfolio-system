@@ -67,6 +67,7 @@ class TestCLIInitValidation:
             inputs = (
                 "invalid-user-\n"
                 "validuser\n"
+                "swe_general\n"
                 "y\n"
                 "hf-user\n"
                 "y\n"
@@ -82,6 +83,7 @@ class TestCLIInitValidation:
                 ["init"],
                 input=inputs,
             )
+
             assert result.exit_code == 0
             assert "Invalid GitHub username format" in result.output
             assert "Invalid Feed URL" in result.output
