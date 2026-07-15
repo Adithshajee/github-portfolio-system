@@ -6,7 +6,7 @@ automation/update_readme.py — DEPRECATED COMPATIBILITY SHIM
 
 ⚠️  DEPRECATION WARNING: This file is preserved for backwards compatibility
     with existing GitHub Actions workflows and documentation references.
-    It will be REMOVED in GPS v3.0.
+    It will be REMOVED in GPS v4.0.
 
 This script now delegates to the GPS v2 engine (src/gps/).
 
@@ -28,7 +28,7 @@ import warnings
 warnings.warn(
     "\n"
     "⚠️  automation/update_readme.py is DEPRECATED as of GPS v2.0.\n"
-    "    This shim will be removed in GPS v3.0.\n"
+    "    This shim will be removed in GPS v4.0.\n"
     "    \n"
     "    Migration: Replace `python automation/update_readme.py` with `gps run`\n"
     "    See: https://adithshajee.github.io/github-portfolio-system/setup\n",

@@ -5,7 +5,7 @@ automation/ — DEPRECATED COMPATIBILITY LAYER
 ⚠️  DEPRECATION NOTICE: GPS v2.0
 ─────────────────────────────────
 This directory (automation/) has been superseded by the new Python package
-at src/gps/ and will be REMOVED in GPS v3.0.
+at src/gps/ and will be REMOVED in GPS v4.0.
 
 Migration Guide:
 ────────────────

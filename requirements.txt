@@ -1,5 +1,5 @@
 # ─────────────────────────────────────────────────────────────────────────────
-# GPS v2: requirements.txt (backwards-compatible shim)
+# GPS v3: requirements.txt (backwards-compatible shim)
 # ─────────────────────────────────────────────────────────────────────────────
 # All project dependencies are now managed via pyproject.toml.
 # For a full development install, run:

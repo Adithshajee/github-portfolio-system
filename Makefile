@@ -9,7 +9,7 @@ RESET  := \033[0m
 # ─── Help ─────────────────────────────────────────────────────────────────────
 help: ## Show this help message
 	@echo ""
-	@echo "$(CYAN)GitHub Portfolio System (GPS) v2$(RESET)"
+	@echo "$(CYAN)GitHub Portfolio System (GPS) v3$(RESET)"
 	@echo "$(YELLOW)Developer Identity Platform — Task Runner$(RESET)"
 	@echo ""
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  $(GREEN)%-18s$(RESET) %s\n", $$1, $$2}'
@@ -40,14 +40,12 @@ lint: ## Run ruff linter
 	ruff check src/ tests/
 	@echo "$(GREEN)✓ Lint passed$(RESET)"
 
-format: ## Format code with ruff and isort
+format: ## Format code with ruff
 	ruff format src/ tests/
-	isort src/ tests/
 	@echo "$(GREEN)✓ Code formatted$(RESET)"
 
 format-check: ## Check formatting without modifying files
 	ruff format --check src/ tests/
-	isort --check-only src/ tests/
 
 typecheck: ## Run mypy static type analysis
 	mypy src/gps/

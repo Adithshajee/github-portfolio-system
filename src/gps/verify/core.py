@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import os
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -100,7 +101,7 @@ class VerificationEngine:
         return {
             "status": status,
             "doctor": doctor,
-            "timestamp": "2026-07-15T00:00:00Z",  # Mock time placeholder
+            "timestamp": datetime.now(timezone.utc).isoformat(),
         }
 
     def _check_git_available(self) -> bool:
