@@ -143,8 +143,8 @@ class TechStackWidget(BaseWidget):
         lines = ["### 🛠️ Technology Stack", "", '<p align="center">']
         for skill in skills:
             lines.append(
-                f'  <img src="https://img.shields.io/badge/{skill}-1E293B?style=flat-square" alt="{skill}" />'
-            )  # noqa: E501
+                f'  <img src="https://img.shields.io/badge/{skill}-1E293B?style=flat-square" alt="{skill}" />'  # noqa: E501
+            )
         lines.append("</p>")
         return "\n".join(lines)
 
@@ -239,7 +239,7 @@ class TimelineWidget(BaseWidget):
     def render(self, data: dict[str, Any]) -> str:
         events = self._settings.get(
             "events", ["2024: Started GPS development", "2026: Released GPS v3.0.0"]
-        )  # noqa: E501
+        )
         lines = ["### ⏳ Activity Timeline", ""]
         for event in events:
             lines.append(f"- *{event}*")
@@ -303,8 +303,8 @@ class SocialLinksWidget(BaseWidget):
         lines = ["### 🤝 Connect with me", "", '<p align="left">']
         for platform, url in links.items():
             lines.append(
-                f'  <a href="{url}" target="_blank"><img src="https://img.shields.io/badge/{platform}-0077B5?style=flat-square" alt="{platform}" /></a>'
-            )  # noqa: E501
+                f'  <a href="{url}" target="_blank"><img src="https://img.shields.io/badge/{platform}-0077B5?style=flat-square" alt="{platform}" /></a>'  # noqa: E501
+            )
         lines.append("</p>")
         return "\n".join(lines)
 
@@ -360,7 +360,7 @@ class CustomMarkdownWidget(BaseWidget):
     def render(self, data: dict[str, Any]) -> str:
         markdown = self._settings.get(
             "markdown", "### 🚀 Custom Section\nWrite whatever you want here!"
-        )  # noqa: E501
+        )
         return str(markdown)
 
     def preview(self) -> str:

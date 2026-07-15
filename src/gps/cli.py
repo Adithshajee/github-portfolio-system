@@ -492,7 +492,7 @@ def cmd_doctor(config: str | None) -> None:
     if doctor_res["python_ok"]:
         console.print(
             "[green]✓[/green] Python version is suitable: " + doctor_res["python_version"]
-        )  # noqa: E501
+        )
     else:
         console.print("[red]✗[/red] Python version is outdated.")
 
@@ -549,7 +549,7 @@ def cmd_verify(config: str | None) -> None:
     """Run full verification diagnostic pipeline and display status report."""
     console.print(
         Panel("[bold cyan]GPS Platform Verification Subsystem[/bold cyan]", border_style="cyan")
-    )  # noqa: E501
+    )
     cfg_path = Path(config) if config else Path("gps.yml")
 
     verify_res = VerificationEngine().verify_all(cfg_path)
@@ -562,23 +562,23 @@ def cmd_verify(config: str | None) -> None:
     doctor_info = verify_res["doctor"]
     table.add_row(
         "Python Environment", "[green]OK[/green]" if doctor_info["python_ok"] else "[red]FAIL[/red]"
-    )  # noqa: E501
+    )
     table.add_row(
         "Internet APIs Ping",
         "[green]OK[/green]" if doctor_info["internet_ok"] else "[red]FAIL[/red]",
-    )  # noqa: E501
+    )
     table.add_row(
         "Configuration syntax",
         "[green]OK[/green]" if doctor_info["config_valid"] else "[red]FAIL[/red]",
-    )  # noqa: E501
+    )
     table.add_row(
         "README Markers check",
         "[green]OK[/green]" if doctor_info["markers_valid"] else "[red]FAIL[/red]",
-    )  # noqa: E501
+    )
     table.add_row(
         "Auth Token detection",
         "[green]DETECTED[/green]" if doctor_info["token_detected"] else "[yellow]MISSING[/yellow]",
-    )  # noqa: E501
+    )
 
     console.print(table)
     if verify_res["status"] in ("PASSED", "WARNING"):
@@ -587,7 +587,7 @@ def cmd_verify(config: str | None) -> None:
     else:
         console.print(
             "\n[red]❌ VERIFICATION FAILED — Resolves check failures before pushing[/red]"
-        )  # noqa: E501
+        )
         sys.exit(1)
 
 
@@ -624,7 +624,219 @@ def cmd_plugin_update(name: str) -> None:
     console.print(f"[green]Plugin '{name}' is up to date.[/green]")
 
 
+@click.group("theme")
+def theme_group() -> None:
+    """Query and configure visual themes."""
+    pass
+
+
+@theme_group.command("list")
+def cmd_theme_list() -> None:
+    """List all registered profile themes."""
+    from gps.themes.registry import ThemeRegistry
+
+    registry = ThemeRegistry()
+    themes = registry.list_all()
+    table = Table(title="Available Portfolio Themes", border_style="blue")
+    table.add_column("Theme ID", style="bold cyan")
+    table.add_column("Display Name")
+    table.add_column("Author")
+    table.add_column("Accent")
+    for t in themes:
+        table.add_row(t.name, t.display_name, t.author, t.accent_color)
+    console.print(table)
+
+
+@theme_group.command("set")
+@click.argument("name")
+def cmd_theme_set(name: str) -> None:
+    """Set the active profile theme in gps.yml."""
+    from gps.themes.registry import ThemeRegistry
+
+    registry = ThemeRegistry()
+    if not registry.get(name):
+        console.print(
+            f"[red]Error: Unknown theme '{name}'. Run 'gps theme list' to see available themes.[/red]"  # noqa: E501
+        )
+        sys.exit(1)
+    from gps.config.manager import ConfigurationManager
+
+    manager = ConfigurationManager()
+    try:
+        settings = manager.load()
+        settings.theme.name = name
+        manager.save(settings)
+        console.print(f"[green]✓ Active theme set to '{name}' successfully.[/green]")
+    except Exception as e:
+        console.print(f"[red]Error saving theme configuration: {e}[/red]")
+        sys.exit(1)
+
+
+@click.group("widget")
+def widget_group() -> None:
+    """Query and configure visual profile widgets."""
+    pass
+
+
+@widget_group.command("list")
+def cmd_widget_list() -> None:
+    """List all registered profile widgets."""
+    from gps.widgets.registry import WidgetRegistry
+
+    registry = WidgetRegistry()
+    widgets = registry.list_all()
+    table = Table(title="Available Visual Widgets", border_style="purple")
+    table.add_column("Widget ID", style="bold purple")
+    table.add_column("Description")
+    for w_name in widgets:
+        w = registry.get(w_name)
+        desc = w.metadata().get("description", "Core visual widget") if w else "Core visual widget"
+        table.add_row(w_name, desc)
+    console.print(table)
+
+
+@click.group("provider")
+def provider_group() -> None:
+    """Query and configure profile data providers."""
+    pass
+
+
+@provider_group.command("list")
+def cmd_provider_list() -> None:
+    """List all integrated providers and their active status."""
+    from gps.config.manager import load_config
+
+    settings = load_config()
+    table = Table(title="Integrated Data Providers", border_style="cyan")
+    table.add_column("Provider ID", style="bold cyan")
+    table.add_column("Status")
+    table.add_column("Details")
+
+    provs = settings.providers
+    table.add_row(
+        "github",
+        "[green]Enabled[/green]" if provs.github.enabled else "[dim]Disabled[/dim]",
+        f"Username: {settings.username or 'not set'}",
+    )
+    table.add_row(
+        "huggingface",
+        "[green]Enabled[/green]" if provs.huggingface.enabled else "[dim]Disabled[/dim]",
+        f"Username: {provs.huggingface.username or 'not set'}",
+    )
+    table.add_row(
+        "kaggle",
+        "[green]Enabled[/green]" if provs.kaggle.enabled else "[dim]Disabled[/dim]",
+        f"Username: {provs.kaggle.username or 'not set'}",
+    )
+    table.add_row(
+        "leetcode",
+        "[green]Enabled[/green]" if provs.leetcode.enabled else "[dim]Disabled[/dim]",
+        f"Username: {provs.leetcode.username or 'not set'}",
+    )
+    table.add_row(
+        "blog",
+        "[green]Enabled[/green]" if provs.blog.enabled else "[dim]Disabled[/dim]",
+        f"Feed URL: {provs.blog.feed_url or 'not set'}",
+    )
+    table.add_row(
+        "linkedin",
+        "[dim]Disabled[/dim]" if not provs.linkedin.enabled else "[green]Enabled[/green]",
+        "Manual updates only",
+    )
+    console.print(table)
+
+
+@provider_group.command("enable")
+@click.argument("name")
+def cmd_provider_enable(name: str) -> None:
+    """Enable a data provider in gps.yml."""
+    from gps.config.manager import ConfigurationManager
+
+    manager = ConfigurationManager()
+    try:
+        settings = manager.load()
+        if name == "github":
+            settings.providers.github.enabled = True
+        elif name == "huggingface":
+            settings.providers.huggingface.enabled = True
+        elif name == "kaggle":
+            settings.providers.kaggle.enabled = True
+        elif name == "leetcode":
+            settings.providers.leetcode.enabled = True
+        elif name == "blog":
+            settings.providers.blog.enabled = True
+        elif name == "linkedin":
+            settings.providers.linkedin.enabled = True
+        else:
+            console.print(f"[red]Error: Unknown provider '{name}'.[/red]")
+            sys.exit(1)
+        manager.save(settings)
+        console.print(f"[green]✓ Provider '{name}' has been enabled.[/green]")
+    except Exception as e:
+        console.print(f"[red]Error saving provider config: {e}[/red]")
+        sys.exit(1)
+
+
+@provider_group.command("disable")
+@click.argument("name")
+def cmd_provider_disable(name: str) -> None:
+    """Disable a data provider in gps.yml."""
+    from gps.config.manager import ConfigurationManager
+
+    manager = ConfigurationManager()
+    try:
+        settings = manager.load()
+        if name == "github":
+            settings.providers.github.enabled = False
+        elif name == "huggingface":
+            settings.providers.huggingface.enabled = False
+        elif name == "kaggle":
+            settings.providers.kaggle.enabled = False
+        elif name == "leetcode":
+            settings.providers.leetcode.enabled = False
+        elif name == "blog":
+            settings.providers.blog.enabled = False
+        elif name == "linkedin":
+            settings.providers.linkedin.enabled = False
+        else:
+            console.print(f"[red]Error: Unknown provider '{name}'.[/red]")
+            sys.exit(1)
+        manager.save(settings)
+        console.print(f"[green]✓ Provider '{name}' has been disabled.[/green]")
+    except Exception as e:
+        console.print(f"[red]Error saving provider config: {e}[/red]")
+        sys.exit(1)
+
+
+@click.group("config")
+def config_group() -> None:
+    """Query and set active profile configuration values."""
+    pass
+
+
+@config_group.command("show")
+def cmd_config_show() -> None:
+    """Show full configuration summary."""
+    from gps.config.manager import load_config
+
+    try:
+        settings = load_config()
+        console.print("[bold cyan]GPS Configuration Details[/bold cyan]")
+        console.print(f"GitHub Username: {settings.username}")
+        console.print(f"README Path: {settings.readme_path}")
+        console.print(f"Timezone: {settings.timezone}")
+        console.print(f"Theme Name: {settings.theme.name}")
+        console.print(f"Theme Variant: {settings.theme.variant}")
+    except Exception as e:
+        console.print(f"[red]Error loading config: {e}[/red]")
+        sys.exit(1)
+
+
 main.add_command(plugin_group)
+main.add_command(theme_group)
+main.add_command(widget_group)
+main.add_command(provider_group)
+main.add_command(config_group)
 
 if __name__ == "__main__":
     main()

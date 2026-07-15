@@ -225,7 +225,7 @@ class ProfileOptimizerAgent:
     def analyze_gaps(self, current_skills: list[str], detected_techs: list[str]) -> list[str]:
         missing = [
             t for t in detected_techs if t.lower() not in [s.lower() for s in current_skills]
-        ]  # noqa: E501
+        ]
         return missing
 
     def compute_readme_score(self, content: str) -> dict[str, Any]:

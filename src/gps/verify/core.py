@@ -62,7 +62,7 @@ class VerificationEngine:
                 else:
                     results["errors"].append(
                         f"Profile README missing at path: {settings.readme_path}"
-                    )  # noqa: E501
+                    )
 
                 # Check tokens
                 gh_token = os.environ.get("GH_PAT") or os.environ.get("GITHUB_TOKEN")
@@ -71,7 +71,7 @@ class VerificationEngine:
                 else:
                     results["warnings"].append(
                         "GitHub token (GH_PAT) is missing. Rate limits will be constrained."
-                    )  # noqa: E501
+                    )
 
             except Exception as e:
                 results["errors"].append(f"Config validation error: {e}")

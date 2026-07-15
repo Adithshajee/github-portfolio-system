@@ -4,9 +4,8 @@ from __future__ import annotations
 
 import logging
 from pathlib import Path
-from unittest.mock import MagicMock, patch
-
 from typing import Any
+from unittest.mock import MagicMock, patch
 
 import pytest
 from click.testing import CliRunner
@@ -80,16 +79,30 @@ class TestGPSLogging:
 @pytest.mark.unit
 class TestProviderRegistry:
     def test_register_and_get_provider(self) -> None:
-        from gps.providers.base import _REGISTRY, BaseProvider, get_provider, list_providers, register
+        from gps.providers.base import (
+            _REGISTRY,
+            BaseProvider,
+            get_provider,
+            list_providers,
+            register,
+        )
 
         @register("_test_provider_")
         class _TestProvider(BaseProvider[dict[str, Any], dict[str, Any]]):
             name = "_test_provider_"
             display_name = "Test"
-            def fetch(self) -> dict[str, Any]: return {}
-            def transform(self, raw: dict[str, Any]) -> dict[str, Any]: return raw
-            def validate(self, data: dict[str, Any]) -> bool: return True
-            def render(self, data: dict[str, Any]) -> str: return ""
+
+            def fetch(self) -> dict[str, Any]:
+                return {}
+
+            def transform(self, raw: dict[str, Any]) -> dict[str, Any]:
+                return raw
+
+            def validate(self, data: dict[str, Any]) -> bool:
+                return True
+
+            def render(self, data: dict[str, Any]) -> str:
+                return ""
 
         assert "_test_provider_" in list_providers()
         cls = get_provider("_test_provider_")
@@ -572,8 +585,8 @@ class TestEngineCoreExtra:
         # 2. README Quality Score
         optimizer = ProfileOptimizerAgent()
         readme_rep = optimizer.compute_readme_score(
-            "# Title\n[![shields](https://img.shields.io/badge/A-B-blue)](#)\n```python\nprint(1)\n```\ninstallation:\npip install gps"
-        )  # noqa: E501
+            "# Title\n[![shields](https://img.shields.io/badge/A-B-blue)](#)\n```python\nprint(1)\n```\ninstallation:\npip install gps"  # noqa: E501
+        )
         assert readme_rep["score"] > 60
         assert readme_rep["badges_rating"] == "Excellent"
 

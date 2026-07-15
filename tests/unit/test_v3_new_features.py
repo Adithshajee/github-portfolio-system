@@ -483,3 +483,75 @@ class TestKaggleClientExtra:
             datasets = client.get_datasets("kuser")
             assert len(datasets) == 1
             assert datasets[0]["title"] == "Dataset 1"
+
+
+@pytest.mark.unit
+class TestCLISubcommandGroups:
+    def test_theme_commands(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+        monkeypatch.chdir(tmp_path)
+        from gps.cli import main
+
+        runner = CliRunner()
+
+        # Initialize config
+        runner.invoke(main, ["init", "-u", "testuser", "--non-interactive"])
+
+        # 1. Theme List
+        res = runner.invoke(main, ["theme", "list"])
+        assert res.exit_code == 0
+        assert "swe_general" in res.output
+
+        # 2. Theme Set (Success)
+        res = runner.invoke(main, ["theme", "set", "ai_ml"])
+        assert res.exit_code == 0
+        assert "Active theme set to 'ai_ml'" in res.output
+
+        # 3. Theme Set (Failure)
+        res = runner.invoke(main, ["theme", "set", "unknown_theme"])
+        assert res.exit_code == 1
+        assert "Unknown theme" in res.output
+
+    def test_widget_commands(self) -> None:
+        from gps.cli import main
+
+        runner = CliRunner()
+        res = runner.invoke(main, ["widget", "list"])
+        assert res.exit_code == 0
+        assert "github_stats" in res.output
+
+    def test_provider_commands(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+        monkeypatch.chdir(tmp_path)
+        from gps.cli import main
+
+        runner = CliRunner()
+        runner.invoke(main, ["init", "-u", "testuser", "--non-interactive"])
+
+        # 1. Provider List
+        res = runner.invoke(main, ["provider", "list"])
+        assert res.exit_code == 0
+        assert "github" in res.output
+
+        # 2. Provider Disable
+        res = runner.invoke(main, ["provider", "disable", "github"])
+        assert res.exit_code == 0
+        assert "disabled" in res.output
+
+        # 3. Provider Enable
+        res = runner.invoke(main, ["provider", "enable", "github"])
+        assert res.exit_code == 0
+        assert "enabled" in res.output
+
+        # 4. Unknown Provider
+        res = runner.invoke(main, ["provider", "enable", "nonexistent"])
+        assert res.exit_code == 1
+
+    def test_config_commands(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+        monkeypatch.chdir(tmp_path)
+        from gps.cli import main
+
+        runner = CliRunner()
+        runner.invoke(main, ["init", "-u", "testuser", "--non-interactive"])
+
+        res = runner.invoke(main, ["config", "show"])
+        assert res.exit_code == 0
+        assert "GitHub Username: testuser" in res.output
